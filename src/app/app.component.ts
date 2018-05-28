@@ -8,9 +8,9 @@ import { Resultado } from './resultado'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  opcionesFecha: {}
   title = 'app'
   apuesta = new Apuesta()
+  opcionesFecha: {}
   fechaModel : any = {}
   tiposApuesta = [Apuesta.PLENO, Apuesta.DOCENA]
   errorMessage = ""
