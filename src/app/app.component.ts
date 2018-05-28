@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  convertirADate(fecha: any) {
+  convertirADate(fecha: any): Date {
     if (!fecha) return null
     return new Date(fecha.year, fecha.month - 1, fecha.day)
   }
