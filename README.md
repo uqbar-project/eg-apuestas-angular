@@ -4,7 +4,7 @@
 
 Esta aplicación permite mostrar cómo funciona el binding bidireccional.
 
-![video](images/apuestas.gif)
+![video](images/demo.gif)
 
 # Creación de la aplicación
 
