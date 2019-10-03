@@ -11,10 +11,10 @@ Esta aplicación permite mostrar cómo funciona el binding bidireccional.
 Creamos la aplicación con Angular CLI y agregamos las dependencias de Material Design for Bootstrap y MyDatePicker para contar con un control calendario (pueden ver [la documentación oficial aquí](https://github.com/kekeh/mydatepicker/blob/master/README.md)):
 
 ```bash
-$ ng new eg-apuestas-angular
-$ cd eg-apuestas-angular
-$ npm install mdbootstrap --save
-$ npm install mydatepicker --save
+ng new eg-apuestas-angular
+cd eg-apuestas-angular
+npm install mdbootstrap --save
+npm install mydatepicker --save
 ```
 
 # Arquitectura general
@@ -34,7 +34,7 @@ Para cargar la fecha manualmente y además abrir un calendario en un formulario 
 ```html
     <my-date-picker name="fechaApuesta" [options]="opcionesFecha"
                     [(ngModel)]="fechaModel" required></my-date-picker>
-``` 
+```
 
 Esto requiere hacer imports en nuestro ngModule:
 
@@ -52,12 +52,12 @@ import { MyDatePickerModule, MyDatePicker } from 'mydatepicker'
   ],
 ```
 
-A su vez, el modelo de la vista (el _app.component.ts_) define 
+A su vez, el modelo de la vista (el _app.component.ts_) define
 
 - una variable fechaModel que hace de modelo intermedio, para poder adaptar la fecha JSON del date picker (que tiene como propiedades year, month y day) a un Date de javascript
 - a su vez, el calendario se puede configurar a través de un JSON, por ejemplo para decirle qué formato utilizar para mostrar las fechas o cuál es la mínima fecha que pueden ingresar
 
-En el evento onInit configuramos estas dos propiedades. Para el caso de las opciones del calendario, se deshabilitan fechas hasta el día de ayer: 
+En el evento onInit configuramos estas dos propiedades. Para el caso de las opciones del calendario, se deshabilitan fechas hasta el día de ayer:
 
 ```typescript
 export class AppComponent implements OnInit {
@@ -161,7 +161,32 @@ Un detalle adicional, se puede bindear el modelo de cada opción (ngValue) vs. e
 <option *ngFor="let valor of apuesta.tipoApuesta.valoresAApostar" [ngValue]="valor">{{valor}}</option>
 ```
 
-# Evento apostar 
+## Definición del tipo de apuesta
+
+En este branch definimos el tipo de apuesta como un **union type**:
+
+```ts
+export type TipoApuesta = Pleno | Docena
+```
+
+Es decir, `TipoApuesta` puede ser de tipo `Pleno` o `Docena`. Como contra, un nuevo tipo requiere agregar la información aquí pero permite que la definición del tipo sea más liviana, en lugar de requerir explícitamente una interfaz como lo deberíamos hacer en Xtend/Java:
+
+```ts
+export interface TipoApuesta {
+    ganancia: number
+    validar(apuesta: Apuesta): void
+    esGanador(numeroGanador: number, valorApostado: number): boolean
+}
+
+export class Pleno implements TipoApuesta {
+  ...
+}
+export class Docena implements TipoApuesta {
+  ...
+}
+```
+
+# Evento apostar
 
 ## Manejo de errores
 
@@ -179,13 +204,13 @@ validarApuesta() {
     }
 ```
 
-lo que hace el modelo de la vista es interceptar los errores y guardarlos en una variable _errorMessage_ 
+lo que hace el modelo de la vista es interceptar los errores y guardarlos en una variable _errorMessage_
 
 ```typescript
   apostar() {
     try {
       this.apuesta.fecha = this.convertirADate(this.fechaModel)
-      this.errorMessage = ""
+      this.errorMessage = ''
       this.apuesta.apostar()
     } catch (errorValidation) {
       this.errorMessage = errorValidation
