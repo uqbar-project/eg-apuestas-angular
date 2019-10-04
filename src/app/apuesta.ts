@@ -6,7 +6,7 @@ export class Pleno {
     valoresAApostar = Array.from(new Array(36), (value, index) => index + 1)
 
     validar(apuesta: Apuesta) {
-        if (apuesta.monto < 10) {
+        if (apuesta.monto <= 10) {
             throw 'Debe apostar más de 10 $'
         }
     }
@@ -22,7 +22,7 @@ export class Docena {
     valoresAApostar = ['Primera', 'Segunda', 'Tercera']
 
     validar(apuesta) {
-        if (apuesta.monto < 50) {
+        if (apuesta.monto <= 50) {
             throw 'Debe apostar más de 50 $'
         }
     }

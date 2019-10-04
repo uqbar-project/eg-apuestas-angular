@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { Apuesta, Pleno, Docena } from './apuesta'
-import { Resultado } from './resultado'
+import { Apuesta } from './apuesta'
 
 @Component({
   selector: 'app-root',
@@ -11,14 +10,14 @@ export class AppComponent implements OnInit {
   title = 'app'
   apuesta = new Apuesta()
   opcionesFecha: {}
-  fechaModel : any = {}
+  fechaModel: any = {}
   tiposApuesta = [Apuesta.PLENO, Apuesta.DOCENA]
-  errorMessage = ""
+  errorMessage = ''
 
   apostar() {
     try {
       this.apuesta.fecha = this.convertirADate(this.fechaModel)
-      this.errorMessage = ""
+      this.errorMessage = ''
       this.apuesta.apostar()
     } catch (errorValidation) {
       this.errorMessage = errorValidation
@@ -46,7 +45,9 @@ export class AppComponent implements OnInit {
   }
 
   convertirADate(fecha: any): Date {
-    if (!fecha) return null
+    if (!fecha) {
+      return null
+    }
     return new Date(fecha.year, fecha.month - 1, fecha.day)
   }
 }
