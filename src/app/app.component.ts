@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core'
+import { faCalendar, faCalendarTimes } from '@fortawesome/free-solid-svg-icons'
+import { IAngularMyDpOptions, IMyDateModel } from 'angular-mydatepicker'
+
 import { Apuesta } from './apuesta'
 
 @Component({
@@ -9,14 +12,15 @@ import { Apuesta } from './apuesta'
 export class AppComponent implements OnInit {
   title = 'app'
   apuesta = new Apuesta()
-  opcionesFecha: {}
-  fechaModel: any = {}
+  opcionesFecha: IAngularMyDpOptions
+  fechaModel: IMyDateModel
   tiposApuesta = [Apuesta.PLENO, Apuesta.DOCENA]
   errorMessage = ''
+  faCalendar = faCalendar
+  faCalendarTimes = faCalendarTimes
 
   apostar() {
     try {
-      this.apuesta.fecha = this.convertirADate(this.fechaModel)
       this.errorMessage = ''
       this.apuesta.apostar()
     } catch (errorValidation) {
@@ -28,12 +32,11 @@ export class AppComponent implements OnInit {
     const ayer = new Date()
     ayer.setDate(ayer.getDate() - 1)
     this.opcionesFecha = {
-      dateFormat: 'dd/mm/yyyy', disableUntil: this.convertirANuevoDate(ayer)
+      dateFormat: 'dd/mm/yyyy',
+      disableUntil: this.convertirANuevoDate(ayer),
+      dateRange: false,
     }
-    const fechaApuesta = this.apuesta.fecha
-    this.fechaModel = {
-      date: this.convertirANuevoDate(fechaApuesta)
-    }
+    this.fechaModel = null
   }
 
   convertirANuevoDate(fecha: Date) {
@@ -44,10 +47,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  convertirADate(fecha: any): Date {
-    if (!fecha) {
-      return null
-    }
-    return new Date(fecha.year, fecha.month - 1, fecha.day)
+  convertirADate(event: any): void {
+    this.apuesta.fecha = event.singleDate.jsDate
   }
 }

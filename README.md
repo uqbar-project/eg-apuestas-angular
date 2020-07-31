@@ -8,14 +8,7 @@ Esta aplicación permite mostrar cómo funciona el binding bidireccional.
 
 # Creación de la aplicación
 
-Creamos la aplicación con Angular CLI y agregamos las dependencias de Material Design for Bootstrap y MyDatePicker para contar con un control calendario (pueden ver [la documentación oficial aquí](https://github.com/kekeh/mydatepicker/blob/master/README.md)):
-
-```bash
-ng new eg-apuestas-angular
-cd eg-apuestas-angular
-npm install mdbootstrap --save
-npm install mydatepicker --save
-```
+Creamos la aplicación con Angular CLI y agregamos las dependencias de Material Design for Bootstrap y MyDatePicker para contar con un control calendario (pueden ver [la documentación oficial aquí](https://github.com/kekeh/mydatepicker/blob/master/README.md)).
 
 # Arquitectura general
 
@@ -321,3 +314,6 @@ import { FormsModule } from '@angular/forms'
 import { MyDatePickerModule, MyDatePicker } from 'mydatepicker'
 import { Apuesta } from './apuesta'
 ```
+
+https://www.npmjs.com/package/@fortawesome/angular-fontawesome
+https://fontawesome.com/icons?d=gallery&q=delete

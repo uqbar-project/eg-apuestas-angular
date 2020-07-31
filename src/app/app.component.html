@@ -1,6 +1,6 @@
 <form #apuestasForm="ngForm" class="form-control">
   <div class="md-form" *ngIf="errorMessage">
-    <div class="alert alert-danger">
+    <div data-testid="errorMessage" class="alert alert-danger">
       {{errorMessage}}
     </div>
   </div>
@@ -8,32 +8,49 @@
   <br>
   <div class="md-form">
     <h5 for="fecha" class="grey-text">Fecha</h5>
-    <my-date-picker name="fechaApuesta" [options]="opcionesFecha" [(ngModel)]="fechaModel" required></my-date-picker>
+    <div class="input-group">
+      <input class="form-control" name="fechaApuesta" data-testid="fechaApuesta" placeholder="Select a date"
+        angular-mydatepicker #dp="angular-mydatepicker" [(ngModel)]="fechaModel" [options]="opcionesFecha"
+        (dateChanged)="convertirADate($event)" required />
+      <!-- clear date button -->
+      <div class="input-group-append">
+        <button type="button" class="btn btn-secondary" *ngIf="fechaModel" (click)="dp.clearDate()">
+          <fa-icon [icon]="faCalendarTimes"></fa-icon>
+        </button>
+      </div>
 
+      <!-- toggle calendar button -->
+      <div class="input-group-append">
+        <button type="button" class="btn btn-primary" (click)="dp.toggleCalendar()">
+          <fa-icon [icon]="faCalendar"></fa-icon>
+        </button>
+      </div>
+    </div>
   </div>
   <div class="md-form">
     <h5 for="monto" class="grey-text">Monto</h5>
-    <input type="number" id="monto" name="monto" class="form-control" [(ngModel)]="apuesta.monto"
+    <input type="number" data-testid="monto" name="monto" class="form-control" [(ngModel)]="apuesta.monto"
       placeholder="Monto en $" required="true">
   </div>
   <div class="md-form">
     <h5 for="tipoApuesta" class="grey-text">Tipo de Apuesta</h5>
-    <select id="tipoApuesta" name="tipoApuesta" class="form-control" [(ngModel)]="apuesta.tipoApuesta" required="true">
+    <select data-testid="tipoApuesta" name="tipoApuesta" class="form-control" [(ngModel)]="apuesta.tipoApuesta"
+      required="true">
       <option *ngFor="let tipo of tiposApuesta" [ngValue]="tipo">{{tipo.descripcion}}</option>
     </select>
   </div>
   <div class="md-form">
     <h5 for="apuesta" class="grey-text">Qu&eacute; apost&aacute;s</h5>
-    <select name="apuesta" id="apuesta" class="form-control" [(ngModel)]="apuesta.valorApostado"
+    <select name="apuesta" data-testid="apuesta" class="form-control" [(ngModel)]="apuesta.valorApostado"
       [disabled]="!apuesta.tipoApuesta.valoresAApostar" required="true">
       <option *ngFor="let valor of apuesta.tipoApuesta.valoresAApostar" [ngValue]="valor">{{valor}}</option>
     </select>
   </div>
-  <div class="md-form" align="center">
-    <button class="btn btn-primary" id="btnApuesta" (click)="apostar()" type="submit">Apostar</button>
+  <div class="md-form">
+    <button class="btn btn-primary" data-testid="btnApuesta" (click)="apostar()" type="submit">Apostar</button>
   </div>
-  <div class="md-form" align="center">
-    <div class="alert alert-info" *ngIf="apuesta.resultado">
+  <div class="md-form">
+    <div class="alert alert-info" data-testid="resultado" *ngIf="apuesta.resultado">
       {{apuesta.resultado.valor()}}
     </div>
   </div>

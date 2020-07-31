@@ -1,8 +1,10 @@
-import { BrowserModule } from '@angular/platform-browser'
 import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { AppComponent } from './app.component'
-import { MyDatePickerModule, MyDatePicker } from 'mydatepicker'
+import { BrowserModule } from '@angular/platform-browser'
+import { AngularMyDatePickerModule } from 'angular-mydatepicker'
+
+import { AppComponent } from './app.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 @NgModule({
   declarations: [
@@ -11,7 +13,8 @@ import { MyDatePickerModule, MyDatePicker } from 'mydatepicker'
   imports: [
     BrowserModule,
     FormsModule,
-    MyDatePickerModule
+    AngularMyDatePickerModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
