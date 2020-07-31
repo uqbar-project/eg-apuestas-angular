@@ -1,11 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormsModule } from '@angular/forms'
 import { BrowserModule } from '@angular/platform-browser'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { AngularMyDatePickerModule } from 'angular-mydatepicker'
 import { getByTestId, mensajeDeError, resultado } from 'src/test-utils'
 
 import { AppComponent } from './app.component'
-import { Apuesta } from './apuesta'
+import { Apuesta, PLENO } from './apuesta'
 
 let fixture: ComponentFixture<AppComponent>
 let app: any
@@ -17,9 +18,10 @@ describe('AppComponent', () => {
         AppComponent
       ],
       imports: [
+        AngularMyDatePickerModule,
         BrowserModule,
         FormsModule,
-        AngularMyDatePickerModule
+        FontAwesomeModule,
       ],
     }).compileComponents()
     fixture = TestBed.createComponent(AppComponent)
@@ -51,7 +53,7 @@ describe('AppComponent', () => {
       {
         fecha: new Date(),
         monto: 60,
-        tipoApuesta: Apuesta.PLENO,
+        tipoApuesta: PLENO,
         valorApostado: 25,
       }
     )

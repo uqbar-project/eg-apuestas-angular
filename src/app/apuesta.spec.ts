@@ -1,13 +1,14 @@
-import { Apuesta } from './apuesta'
+import { Apuesta, PLENO } from './apuesta'
 
 describe('Apuesta', () => {
   it('apuesta valida pasa validaciones ok', () => {
     const apuestaOk = new Apuesta()
     apuestaOk.fecha = new Date()
     apuestaOk.monto = 60
-    apuestaOk.tipoApuesta = Apuesta.PLENO
+    apuestaOk.tipoApuesta = PLENO
     apuestaOk.valorApostado = 3
     apuestaOk.validarApuesta()
+    expect(true).toBeTruthy()
   })
   it('apuesta sin fecha tira error', () => {
     const apuestaSinFecha = new Apuesta()
@@ -31,14 +32,14 @@ describe('Apuesta', () => {
     const apuestaSinValorApostado = new Apuesta()
     apuestaSinValorApostado.fecha = new Date()
     apuestaSinValorApostado.monto = 5
-    apuestaSinValorApostado.tipoApuesta = Apuesta.PLENO
+    apuestaSinValorApostado.tipoApuesta = PLENO
     expect(() => apuestaSinValorApostado.validarApuesta()).toThrow("Debe ingresar valor a apostar")
   })
   it('apuesta pleno con poco monto tira error', () => {
     const apuestaPleno = new Apuesta()
     apuestaPleno.fecha = new Date()
     apuestaPleno.monto = 5
-    apuestaPleno.tipoApuesta = Apuesta.PLENO
+    apuestaPleno.tipoApuesta = PLENO
     apuestaPleno.valorApostado = 2
     expect(() => apuestaPleno.validarApuesta()).toThrow("Debe apostar más de 10 $")
   })

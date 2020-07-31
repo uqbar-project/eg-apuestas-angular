@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { faCalendar, faCalendarTimes } from '@fortawesome/free-solid-svg-icons'
-import { IAngularMyDpOptions, IMyDateModel } from 'angular-mydatepicker'
+import { IAngularMyDpOptions } from 'angular-mydatepicker'
 
-import { Apuesta } from './apuesta'
+import { Apuesta, DOCENA, PLENO } from './apuesta'
 
 @Component({
   selector: 'app-root',
@@ -13,8 +13,7 @@ export class AppComponent implements OnInit {
   title = 'app'
   apuesta = new Apuesta()
   opcionesFecha: IAngularMyDpOptions
-  fechaModel: IMyDateModel
-  tiposApuesta = [Apuesta.PLENO, Apuesta.DOCENA]
+  tiposApuesta = [PLENO, DOCENA]
   errorMessage = ''
   faCalendar = faCalendar
   faCalendarTimes = faCalendarTimes
@@ -36,7 +35,6 @@ export class AppComponent implements OnInit {
       disableUntil: this.convertirANuevoDate(ayer),
       dateRange: false,
     }
-    this.fechaModel = null
   }
 
   convertirANuevoDate(fecha: Date) {

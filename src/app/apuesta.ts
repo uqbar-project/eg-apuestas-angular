@@ -37,13 +37,13 @@ export class Docena {
 
 export type TipoApuesta = Pleno | Docena
 
-export class Apuesta {
-  public static PLENO = new Pleno()
-  public static DOCENA = new Docena()
+export const PLENO = new Pleno()
+export const DOCENA = new Docena()
 
+export class Apuesta {
   fecha = null
   monto = 0
-  tipoApuesta: TipoApuesta = Apuesta.PLENO
+  tipoApuesta: TipoApuesta = PLENO
   valorApostado: number
   resultado: Resultado
 
