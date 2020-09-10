@@ -11,7 +11,7 @@
     <div class="input-group">
       <input class="form-control" name="fechaApuesta" data-testid="fechaApuesta" placeholder="Select a date"
         angular-mydatepicker #dp="angular-mydatepicker" [(ngModel)]="fechaModel" [options]="opcionesFecha"
-        (dateChanged)="convertirADate($event)" required />
+        (dateChanged)="dateSelected($event)" required />
       <!-- clear date button -->
       <div class="input-group-append">
         <button type="button" class="btn btn-secondary" *ngIf="fechaModel" (click)="dp.clearDate()">

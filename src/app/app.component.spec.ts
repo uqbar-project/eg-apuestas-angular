@@ -3,10 +3,10 @@ import { FormsModule } from '@angular/forms'
 import { BrowserModule } from '@angular/platform-browser'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { AngularMyDatePickerModule } from 'angular-mydatepicker'
-import { getByTestId, mensajeDeError, resultado } from 'src/test-utils'
 
 import { AppComponent } from './app.component'
 import { Apuesta, PLENO } from './apuesta'
+import { getByTestId, mensajeDeError, resultado } from './test-utils'
 
 let fixture: ComponentFixture<AppComponent>
 let app: any

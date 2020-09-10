@@ -28,7 +28,7 @@ Para cargar la fecha manualmente y además abrir un calendario en un formulario 
     <div class="input-group">
       <input class="form-control" name="fechaApuesta" data-testid="fechaApuesta" placeholder="Select a date"
         angular-mydatepicker #dp="angular-mydatepicker" [(ngModel)]="fechaModel" [options]="opcionesFecha"
-        (dateChanged)="convertirADate($event)" required />
+        (dateChanged)="dateSelected($event)" required />
 
       <!-- clear date button -->
       <div class="input-group-append">
@@ -85,12 +85,12 @@ export class AppComponent implements OnInit {
     ayer.setDate(ayer.getDate() - 1)
     this.opcionesFecha = {
       dateFormat: 'dd/mm/yyyy',
-      disableUntil: this.convertirANuevoDate(ayer),
+      disableUntil: this.dateToJson(ayer),
       dateRange: false,
     }
   }
 
-  convertirANuevoDate(fecha: Date) {
+  dateToJson(fecha: Date) {
     return {
       year: fecha.getFullYear(),
       month: fecha.getMonth() + 1,
@@ -98,15 +98,15 @@ export class AppComponent implements OnInit {
     }
   }
 
-  convertirADate(event: any): void {
+  dateSelected(event: any): void {
     this.apuesta.fecha = event.singleDate.jsDate
   }
 ```
 
 Tenemos dos métodos que adaptan el modelo del calendario al de la apuesta:
 
-- el método `convertirADate` se dispara cuando el usuario selecciona una fecha en el calendario (véanlo en el HTML)
-- el método `convertirANuevoDate` transforma un Date de javascript en la fecha JSON que utiliza el framework myDatePicker. Esto nos sirve para no permitir la selección de una fecha anterior a la de hoy.
+- el método `dateSelected` se dispara cuando el usuario selecciona una fecha en el calendario (véanlo en el HTML)
+- el método `dateToJson` transforma un Date de javascript en la fecha JSON que utiliza el framework myDatePicker. Esto nos sirve para no permitir la selección de una fecha anterior a la de hoy.
 
 # Combos anidados
 

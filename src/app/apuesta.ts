@@ -43,7 +43,7 @@ export const DOCENA = new Docena()
 export class Apuesta {
   fecha = null
   monto = 0
-  tipoApuesta: TipoApuesta = PLENO
+  tipoApuesta = PLENO
   valorApostado: number
   resultado: Resultado
 
@@ -72,11 +72,13 @@ export class Apuesta {
     this.resultado = null
     this.validarApuesta()
     const numeroGanador = Math.floor(Math.random() * 37)
-    let ganancia = 0
-    if (this.tipoApuesta.esGanador(numeroGanador, this.valorApostado)) {
-      ganancia = this.monto * this.tipoApuesta.ganancia
-    }
+    const ganancia = this.calcularGanancia(numeroGanador)
     this.resultado = new Resultado(numeroGanador, ganancia)
+  }
+
+  calcularGanancia(numeroGanador: number) {
+    return (this.tipoApuesta.esGanador(numeroGanador, this.valorApostado)) ?
+      this.monto * this.tipoApuesta.ganancia : 0
   }
 }
 

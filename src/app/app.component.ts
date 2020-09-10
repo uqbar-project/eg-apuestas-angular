@@ -32,12 +32,12 @@ export class AppComponent implements OnInit {
     ayer.setDate(ayer.getDate() - 1)
     this.opcionesFecha = {
       dateFormat: 'dd/mm/yyyy',
-      disableUntil: this.convertirANuevoDate(ayer),
+      disableUntil: this.dateToJson(ayer),
       dateRange: false,
     }
   }
 
-  convertirANuevoDate(fecha: Date) {
+  dateToJson(fecha: Date) {
     return {
       year: fecha.getFullYear(),
       month: fecha.getMonth() + 1,
@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  convertirADate(event: any): void {
+  dateSelected(event: any): void {
     this.apuesta.fecha = event.singleDate.jsDate
   }
 }
