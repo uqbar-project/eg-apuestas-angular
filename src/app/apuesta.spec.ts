@@ -1,4 +1,4 @@
-import { Apuesta, PLENO } from './apuesta'
+import { Apuesta, DOCENA, PLENO } from './apuesta'
 
 describe('Apuesta', () => {
   it('apuesta valida pasa validaciones ok', () => {
@@ -37,9 +37,17 @@ describe('Apuesta', () => {
   it('apuesta pleno con poco monto tira error', () => {
     const apuestaPleno = new Apuesta()
     apuestaPleno.fecha = new Date()
-    apuestaPleno.monto = 5
+    apuestaPleno.monto = 10
     apuestaPleno.tipoApuesta = PLENO
     apuestaPleno.valorApostado = 2
     expect(() => apuestaPleno.validarApuesta()).toThrow("Debe apostar más de 10 $")
+  })
+  it('apuesta docena con poco monto tira error', () => {
+    const apuestaPleno = new Apuesta()
+    apuestaPleno.fecha = new Date()
+    apuestaPleno.monto = 50
+    apuestaPleno.tipoApuesta = DOCENA
+    apuestaPleno.valorApostado = 2
+    expect(() => apuestaPleno.validarApuesta()).toThrow("Debe apostar más de 50 $")
   })
 })

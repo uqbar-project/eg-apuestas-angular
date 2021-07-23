@@ -49,7 +49,7 @@ export class Apuesta {
   fecha: Date | undefined
   monto = 0
   tipoApuesta: TipoApuesta | undefined = PLENO
-  valorApostado = 0
+  valorApostado!: string | number
   resultado: Resultado | null = null
 
   validarApuesta() {
@@ -76,9 +76,13 @@ export class Apuesta {
   apostar() {
     this.resultado = null
     this.validarApuesta()
-    const numeroGanador = Math.floor(Math.random() * 37)
+    const numeroGanador = this.obtenerNumeroGanador()
     const ganancia = this.calcularGanancia(numeroGanador)
     this.resultado = new Resultado(numeroGanador, ganancia)
+  }
+
+  obtenerNumeroGanador() {
+    return Math.floor(Math.random() * 37)
   }
 
   calcularGanancia(numeroGanador: number) {
