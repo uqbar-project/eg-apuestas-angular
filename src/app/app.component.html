@@ -1,20 +1,21 @@
 <form #apuestasForm="ngForm" class="form-control">
   <div class="md-form" *ngIf="errorMessage">
-    <div data-testid="errorMessage" class="alert alert-danger">
+    <div data-testid="errorMessage" class="alert alert-danger message">
       {{errorMessage}}
     </div>
   </div>
-  <p class="h4 text-center mb-4">Apuestas de Ruleta</p>
-  <br>
+  <div class="title">
+    <p class="h3 text-center">Apuestas de Ruleta</p>
+  </div>
   <div class="md-form">
     <h5 for="fecha" class="grey-text">Fecha</h5>
     <div class="input-group">
       <input class="form-control" name="fechaApuesta" data-testid="fechaApuesta" placeholder="Select a date"
-        angular-mydatepicker #dp="angular-mydatepicker" [(ngModel)]="fechaModel" [options]="opcionesFecha"
+        angular-mydatepicker #dp="angular-mydatepicker" [options]="opcionesFecha"
         (dateChanged)="dateSelected($event)" required />
       <!-- clear date button -->
       <div class="input-group-append">
-        <button type="button" class="btn btn-secondary" *ngIf="fechaModel" (click)="dp.clearDate()">
+        <button type="button" class="btn btn-secondary" *ngIf="apuesta.fecha" (click)="dp.clearDate()">
           <fa-icon [icon]="faCalendarTimes"></fa-icon>
         </button>
       </div>
@@ -42,15 +43,15 @@
   <div class="md-form">
     <h5 for="apuesta" class="grey-text">Qu&eacute; apost&aacute;s</h5>
     <select name="apuesta" data-testid="apuesta" class="form-control" [(ngModel)]="apuesta.valorApostado"
-      [disabled]="!apuesta.tipoApuesta.valoresAApostar" required="true">
-      <option *ngFor="let valor of apuesta.tipoApuesta.valoresAApostar" [ngValue]="valor">{{valor}}</option>
+      [disabled]="!apuesta.tipoApuesta?.valoresAApostar" required="true">
+      <option *ngFor="let valor of apuesta.tipoApuesta?.valoresAApostar" [ngValue]="valor">{{valor}}</option>
     </select>
   </div>
   <div class="md-form">
     <button class="btn btn-primary" data-testid="btnApuesta" (click)="apostar()" type="submit">Apostar</button>
   </div>
   <div class="md-form">
-    <div class="alert alert-info" data-testid="resultado" *ngIf="apuesta.resultado">
+    <div class="alert alert-info message" data-testid="resultado" *ngIf="apuesta.resultado">
       {{apuesta.resultado.valor()}}
     </div>
   </div>

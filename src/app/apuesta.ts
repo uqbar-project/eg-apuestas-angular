@@ -21,13 +21,13 @@ export class Docena {
   descripcion = 'Docena'
   valoresAApostar = ['Primera', 'Segunda', 'Tercera']
 
-  validar(apuesta) {
+  validar(apuesta: Apuesta) {
     if (apuesta.monto <= 50) {
       throw 'Debe apostar más de 50 $'
     }
   }
 
-  esGanador(numeroGanador, valorApostado) {
+  esGanador(numeroGanador: number, valorApostado: string) {
     const docena = this.valoresAApostar.indexOf(valorApostado)
     const min = docena * 12 + 1
     const max = (docena + 1) * 12
@@ -35,17 +35,22 @@ export class Docena {
   }
 }
 
-export type TipoApuesta = Pleno | Docena
+export type TipoApuesta = {
+  esGanador(numeroGanador: number, valorApostado: number | string): boolean
+  validar(apuesta: Apuesta): void
+  get ganancia(): number
+  get valoresAApostar(): (number | string)[]
+}
 
 export const PLENO = new Pleno()
 export const DOCENA = new Docena()
 
 export class Apuesta {
-  fecha = null
+  fecha: Date | undefined
   monto = 0
-  tipoApuesta = PLENO
-  valorApostado: number
-  resultado: Resultado
+  tipoApuesta: TipoApuesta | undefined = PLENO
+  valorApostado = 0
+  resultado: Resultado | null = null
 
   validarApuesta() {
     const now = new Date()
@@ -77,8 +82,7 @@ export class Apuesta {
   }
 
   calcularGanancia(numeroGanador: number) {
-    return (this.tipoApuesta.esGanador(numeroGanador, this.valorApostado)) ?
+    return (this.tipoApuesta?.esGanador(numeroGanador, this.valorApostado)) ?
       this.monto * this.tipoApuesta.ganancia : 0
   }
 }
-

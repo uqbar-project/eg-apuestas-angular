@@ -12,7 +12,6 @@ describe('Apuesta', () => {
   })
   it('apuesta sin fecha tira error', () => {
     const apuestaSinFecha = new Apuesta()
-    apuestaSinFecha.fecha = null
     expect(() => apuestaSinFecha.validarApuesta()).toThrow("Debe ingresar una fecha de apuesta")
   })
   it('apuesta con monto negativo tira error', () => {
@@ -25,7 +24,7 @@ describe('Apuesta', () => {
     const apuestaSinTipoApuesta = new Apuesta()
     apuestaSinTipoApuesta.fecha = new Date()
     apuestaSinTipoApuesta.monto = 40
-    apuestaSinTipoApuesta.tipoApuesta = null
+    apuestaSinTipoApuesta.tipoApuesta = undefined
     expect(() => apuestaSinTipoApuesta.validarApuesta()).toThrow("Debe ingresar tipo de apuesta")
   })
   it('apuesta sin valor apostado tira error', () => {

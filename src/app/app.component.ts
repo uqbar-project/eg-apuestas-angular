@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { faCalendar, faCalendarTimes } from '@fortawesome/free-solid-svg-icons'
-import { IAngularMyDpOptions } from 'angular-mydatepicker'
+import { IAngularMyDpOptions, IMyDateModel } from 'angular-mydatepicker'
 
 import { Apuesta, DOCENA, PLENO } from './apuesta'
 
@@ -12,7 +12,7 @@ import { Apuesta, DOCENA, PLENO } from './apuesta'
 export class AppComponent implements OnInit {
   title = 'app'
   apuesta = new Apuesta()
-  opcionesFecha: IAngularMyDpOptions
+  opcionesFecha!: IAngularMyDpOptions
   tiposApuesta = [PLENO, DOCENA]
   errorMessage = ''
   faCalendar = faCalendar
@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  dateSelected(event: any): void {
-    this.apuesta.fecha = event.singleDate.jsDate
+  dateSelected(event: IMyDateModel): void {
+    this.apuesta.fecha = event.singleDate?.jsDate
   }
 }

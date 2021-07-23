@@ -1,6 +1,7 @@
 # Apuestas de una ruleta
 
-[![Build Status](https://travis-ci.org/uqbar-project/eg-apuestas-angular.svg?branch=master)](https://travis-ci.org/uqbar-project/eg-apuestas-angular)
+[![Build](https://github.com/uqbar-project/eg-apuestas-angular/actions/workflows/build.yml/badge.svg)](https://github.com/uqbar-project/eg-apuestas-angular/actions/workflows/build.yml) ![Coverage](./badges/eg-apuestas-angular/coverage.svg)
+
 
 Esta aplicación permite mostrar cómo funciona el binding bidireccional.
 

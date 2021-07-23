@@ -3,7 +3,7 @@ export class Resultado {
     numeroGanador : number
     montoAGanar : number
     
-    constructor(numeroGanador, montoAGanar) {
+    constructor(numeroGanador: number, montoAGanar: number) {
         this.numeroGanador = numeroGanador
         this.montoAGanar = montoAGanar
     }
