@@ -7,6 +7,7 @@ import { AngularMyDatePickerModule } from 'angular-mydatepicker'
 import { AppComponent } from './app.component'
 import { Apuesta, PLENO, DOCENA, TipoApuesta } from './apuesta'
 import { getByTestId, mensajeDeError, resultado } from './test-utils'
+import './app.module'
 
 let fixture: ComponentFixture<AppComponent>
 let app: AppComponent
