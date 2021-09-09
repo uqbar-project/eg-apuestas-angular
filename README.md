@@ -5,7 +5,7 @@
 
 Esta aplicación permite mostrar cómo funciona el binding bidireccional.
 
-<img src="images/demo.gif" height="77%" width="77%">
+<img src="images/demo3.gif" height="77%" width="77%">
 
 # Creación de la aplicación
 
@@ -26,25 +26,22 @@ La vista tiene tags propios del framework Material Design for Bootstrap. El bind
 Para cargar la fecha manualmente y además abrir un calendario en un formulario modal, utilizamos el control angular-mydatepicker, de la siguiente manera:
 
 ```html
-    <div class="input-group">
-      <input class="form-control" name="fechaApuesta" data-testid="fechaApuesta" placeholder="Select a date"
-        angular-mydatepicker #dp="angular-mydatepicker" [(ngModel)]="fechaModel" [options]="opcionesFecha"
-        (dateChanged)="dateSelected($event)" required />
+<input class="form-control" name="fechaApuesta" data-testid="fechaApuesta" placeholder="Select a date"
+  angular-mydatepicker #dp="angular-mydatepicker" [options]="opcionesFecha"
+  (dateChanged)="dateSelected($event)" required />
+<!-- clear date button -->
+<div class="input-group-append">
+  <button type="button" class="btn btn-secondary" *ngIf="apuesta.fecha" (click)="dp.clearDate()">
+    <fa-icon [icon]="faCalendarTimes"></fa-icon>
+  </button>
+</div>
 
-      <!-- clear date button -->
-      <div class="input-group-append">
-        <button type="button" class="btn btn-secondary" *ngIf="fechaModel" (click)="dp.clearDate()">
-          <fa-icon [icon]="faCalendarTimes"></fa-icon>
-        </button>
-      </div>
-
-      <!-- toggle calendar button -->
-      <div class="input-group-append">
-        <button type="button" class="btn btn-primary" (click)="dp.toggleCalendar()">
-          <fa-icon [icon]="faCalendar"></fa-icon>
-        </button>
-      </div>
-    </div>
+<!-- toggle calendar button -->
+<div class="input-group-append">
+  <button type="button" class="btn btn-primary" (click)="dp.toggleCalendar()">
+    <fa-icon [icon]="faCalendar"></fa-icon>
+  </button>
+</div>
 ```
 
 Esto requiere hacer imports en nuestro ngModule, que incluyen la biblioteca de íconos Font Awesome para poder utilizarlos:
@@ -76,8 +73,6 @@ En el evento onInit configuramos estas dos propiedades. Para el caso de las opci
 export class AppComponent implements OnInit {
   ...
   opcionesFecha: IAngularMyDpOptions
-  fechaModel: IMyDateModel
-
   faCalendar = faCalendar
   faCalendarTimes = faCalendarTimes
 
@@ -143,18 +138,17 @@ export const DOCENA = new Docena()
 A su vez la apuesta inicializa la referencia tipoApuesta como pleno:
 ```typescript
 export class Apuesta {
-    tipoApuesta : TipoApuesta = Apuesta.PLENO
+    tipoApuesta: TipoApuesta | undefined = PLENO
 ```
 
 Veamos cómo se define el selector HTML en la vista:
 
 ```html
-<div class="md-form">
 <h5 for="tipoApuesta" class="grey-text">Tipo de Apuesta</h5>
-<select id="tipoApuesta" name="tipoApuesta" class="form-control" [(ngModel)]="apuesta.tipoApuesta" required="true">
-    <option *ngFor="let tipo of tiposApuesta" [ngValue]="tipo">{{tipo.descripcion}}</option>
+<select data-testid="tipoApuesta" name="tipoApuesta" class="form-control" [(ngModel)]="apuesta.tipoApuesta"
+  required="true">
+  <option *ngFor="let tipo of tiposApuesta" [ngValue]="tipo">{{tipo.descripcion}}</option>
 </select>
-</div>
 ```
 
 Aquí vemos que las opciones salen de la colección tiposApuesta que define el modelo de la vista (_app.component.ts_), mientras que hay un binding bidireccional del select hacia apuesta.tipoApuesta. Entonces si la apuesta tiene un valor que no está dentro de las opciones, no será una selección válida para el combo, y no va a mostrar nada. Es decir, tanto la lista de tipos de apuesta como el valor tipoApuesta tienen que coincidir, no es válido hacer en apuesta:
@@ -174,13 +168,10 @@ porque eso genera nuevas copias de Pleno y Docena que son distintas a las que te
 Por otra parte, los valores a apostar son numéricos, lo que evita nuevas copias y por lo tanto, malos entendidos en el segundo combo. Vemos la configuración del selector en la vista:
 
 ```html
-<div class="md-form">
-<h5 for="apuesta" class="grey-text">Qu&eacute; apost&aacute;s</h5>
-<select name="apuesta" id="apuesta" class="form-control" [(ngModel)]="apuesta.valorApostado" [disabled]="!apuesta.tipoApuesta.valoresAApostar"
-    required="true">
-    <option *ngFor="let valor of apuesta.tipoApuesta.valoresAApostar" [ngValue]="valor">{{valor}}</option>
+<select name="apuesta" data-testid="apuesta" class="form-control" [(ngModel)]="apuesta.valorApostado"
+  [disabled]="!apuesta.tipoApuesta?.valoresAApostar" required="true">
+  <option *ngFor="let valor of apuesta.tipoApuesta?.valoresAApostar" [ngValue]="valor">{{valor}}</option>
 </select>
-</div>
 ```
 
 Es interesante que las opciones salen de "apuesta.tipoApuesta.valoresAApostar", por lo tanto, cuando modificamos la selección del tipo de apuesta en el primer combo, eso dispara una nueva lista de opciones para el segundo combo.
@@ -193,25 +184,35 @@ Un detalle adicional, se puede bindear el modelo de cada opción (ngValue) vs. e
 
 ## Definición del tipo de apuesta
 
-En este branch definimos el tipo de apuesta como un **union type**:
+Podríamos haber definido el tipo de apuesta como un **union type**:
 
 ```ts
 export type TipoApuesta = Pleno | Docena
 ```
 
-Es decir, `TipoApuesta` puede ser de tipo `Pleno` o `Docena`. Como contra, un nuevo tipo requiere agregar la información aquí pero permite que la definición del tipo sea más liviana, en lugar de requerir explícitamente una interfaz como lo deberíamos hacer en Xtend/Java:
+Es decir, `TipoApuesta` sería de tipo `Pleno` o `Docena`. Pero tenemos dos temas:
+
+- un nuevo tipo requiere agregar la información aquí
+- tendremos un problema en el momento de trabajar con el valor a apostar, porque en la docena es un string mientras que para el caso del pleno es un número.
+
+Entonces generamos un tipo que tiene la definición mínima, un poco más trabajosa:
 
 ```ts
-export interface TipoApuesta {
-    ganancia: number
-    validar(apuesta: Apuesta): void
-    esGanador(numeroGanador: number, valorApostado: number): boolean
+export type TipoApuesta = {
+  esGanador(numeroGanador: number, valorApostado: number | string): boolean
+  validar(apuesta: Apuesta): void
+  get ganancia(): number
+  get valoresAApostar(): (number | string)[]
 }
+```
 
-export class Pleno implements TipoApuesta {
+y utilizando duck typing no es necesario hacer nada en Pleno o Docena:
+
+```ts
+export class Pleno {
   ...
 }
-export class Docena implements TipoApuesta {
+export class Docena {
   ...
 }
 ```
@@ -224,34 +225,36 @@ Dado que al apostar los objetos de dominio apuesta pueden tirar errores de valid
 
 ```typescript
 validarApuesta() {
-    const now = new Date()
-    now.setHours(0, 0, 0, 0)
-    if (!this.fecha) {
-        throw "Debe ingresar una fecha de apuesta"
-    }
-    if (now.getTime() > this.fecha.getTime()) {
-        throw "Debe ingresar una fecha actual o posterior al día de hoy"
-    }
+  const now = new Date()
+  now.setHours(0, 0, 0, 0)
+  if (!this.fecha) {
+    throw 'Debe ingresar una fecha de apuesta'
+  }
+  if (now.getTime() > this.fecha.getTime()) {
+    throw 'Debe ingresar una fecha actual o posterior al día de hoy'
+  }
 ```
 
 lo que hace el modelo de la vista es interceptar los errores y guardarlos en una variable _errorMessage_
 
 ```typescript
-  apostar() {
-    try {
-      this.errorMessage = ''
-      this.apuesta.apostar()
-    } catch (errorValidation) {
-      this.errorMessage = errorValidation
-    }
+apostar() {
+  try {
+    this.errorMessage = ''
+    this.apuesta.apostar()
+  } catch (errorValidation: any) {
+    this.errorMessage = errorValidation
   }
+}
 ```
 
 que a su vez la vista muestra con un cartel en rojo (si la referencia tiene algún valor)
 
 ```html
-  <div data-testid="errorMessage" class="alert alert-danger">
-    {{errorMessage}}
+<div class="md-form" *ngIf="errorMessage">
+    <div data-testid="errorMessage" class="alert alert-danger message">
+      {{errorMessage}}
+    </div>
   </div>
 ```
 
@@ -308,9 +311,7 @@ Además tenemos el testeo del componente principal, que delega al objeto de domi
   }))
 ```
 
-Como la apuesta tiene una respuesta aleatoria, no podemos saber si el usuario ganará o perderá, pero sí podemos verificar que el resultado tenga algo (_truthy_ incluye distinto de null y distinto de undefined). Otra opción podría ser generar un comportamiento simulado mediante un _stub_ o un _mock_, pero por el momento nos alcanza con esta estrategia.
-
-Otros tests que hacemos es verificar que al no cargar alguno de los valores se visualice el mensaje de error. El lector puede pensar que hay cierta duplicidad respecto al anterior test unitario de la apuesta, pero este test es más global: no estamos esperando una excepción de apuesta, sino un mensaje dentro de un div, lo que implica que estamos validando que el componente principal de la aplicación captura el error adecuadamente.
+Al no cargar alguno de los valores estamos testeando que se visualice el mensaje de error. El lector puede pensar que hay cierta duplicidad respecto al anterior test unitario de la apuesta, pero este test es más global: no estamos esperando una excepción de apuesta, sino un mensaje dentro de un div, lo que implica que estamos validando que el componente principal de la aplicación captura el error adecuadamente.
 
 ```ts
   it('should fail if negative amount is entered', async(() => {
@@ -328,6 +329,21 @@ Otros tests que hacemos es verificar que al no cargar alguno de los valores se v
 ```
 
 Recordemos que el archivo de tests del componente debe replicar los imports del ngModule.
+
+Y por último, mostramos cómo podemos asegurar que una apuesta puede ser ganadora (lo mismo para ser perdedora):
+
+```ts
+it('should pass all validations and inform if user wins - single', () => {
+  app.apuesta = apostarAl(PLENO, 25)
+  app.apuesta.obtenerNumeroGanador = () => 25
+  getByTestId(fixture, 'btnApuesta').click()
+  fixture.detectChanges()
+
+  expect(resultado(fixture)).toContain('Ganaste $700')
+})
+```
+
+Dada la naturaleza dinámica de typescript, podemos redefinir el comportamiento del método obtenerNumeroGanador para que devuelva siempre 25 dentro del contexto del test.
 
 ## Material adicional
 

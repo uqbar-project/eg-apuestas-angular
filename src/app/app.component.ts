@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
     try {
       this.errorMessage = ''
       this.apuesta.apostar()
-    } catch (errorValidation) {
+    } catch (errorValidation: any) {
       this.errorMessage = errorValidation
     }
   }

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormsModule } from '@angular/forms'
 import { BrowserModule } from '@angular/platform-browser'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
@@ -13,7 +13,7 @@ let fixture: ComponentFixture<AppComponent>
 let app: AppComponent
 
 describe('AppComponent', () => {
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent
@@ -27,16 +27,16 @@ describe('AppComponent', () => {
     }).compileComponents()
     fixture = TestBed.createComponent(AppComponent)
     app = fixture.debugElement.componentInstance
-  }))
-  it('should create the app', waitForAsync(() => {
+  })
+  it('should create the app', () => {
     expect(app).toBeTruthy()
-  }))
-  it('should fail if no date is entered', waitForAsync(() => {
+  })
+  it('should fail if no date is entered', () => {
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
     expect(mensajeDeError(fixture)).toContain('Debe ingresar una fecha de apuesta')
-  }))  
-  it('should fail if previous date is entered', waitForAsync(() => {
+  })
+  it('should fail if previous date is entered', () => {
     app.apuesta = Object.assign(
       new Apuesta(),
       {
@@ -46,8 +46,8 @@ describe('AppComponent', () => {
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
     expect(mensajeDeError(fixture)).toContain('Debe ingresar una fecha actual o posterior al día de hoy')
-  }))
-  it('should fail if negative amount is entered', waitForAsync(() => {
+  })
+  it('should fail if negative amount is entered', () => {
     app.apuesta = Object.assign(
       new Apuesta(),
       {
@@ -58,39 +58,39 @@ describe('AppComponent', () => {
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
     expect(mensajeDeError(fixture)).toContain('El monto a apostar debe ser positivo')
-  }))
-  it('should pass all validations and inform if user wins - single', waitForAsync(() => {
+  })
+  it('should pass all validations and inform if user wins - single', () => {
     app.apuesta = apostarAl(PLENO, 25)
     app.apuesta.obtenerNumeroGanador = () => 25
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
 
     expect(resultado(fixture)).toContain('Ganaste $700')
-  }))
-  it('should pass all validations and inform if user looses - single', waitForAsync(() => {
+  })
+  it('should pass all validations and inform if user looses - single', () => {
     app.apuesta = apostarAl(PLENO, 25)
     app.apuesta.obtenerNumeroGanador = () => 24
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
 
     expect(resultado(fixture)).toContain('¡¡Perdiste!! Salió el 24')
-  }))
-  it('should pass all validations and inform if user wins - dozen', waitForAsync(() => {
+  })
+  it('should pass all validations and inform if user wins - dozen', () => {
     app.apuesta = apostarAl(DOCENA, 'Primera', 100)
     app.apuesta.obtenerNumeroGanador = () => 1
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
 
     expect(resultado(fixture)).toContain('Ganaste $1100')
-  }))
-  it('should pass all validations and inform if user looses - dozen', waitForAsync(() => {
+  })
+  it('should pass all validations and inform if user looses - dozen', () => {
     app.apuesta = apostarAl(DOCENA, 'Segunda', 100)
     app.apuesta.obtenerNumeroGanador = () => 1
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
 
     expect(resultado(fixture)).toContain('¡¡Perdiste!! Salió el 1')
-  }))
+  })
 })
 
 function apostarAl(tipoApuesta: TipoApuesta, numero: number | string, monto = 20): Apuesta {
@@ -101,4 +101,3 @@ function apostarAl(tipoApuesta: TipoApuesta, numero: number | string, monto = 20
   apuesta.valorApostado = numero
   return apuesta
 }
-
