@@ -219,9 +219,9 @@ export class Docena {
 
 # Evento apostar
 
-## Manejo de errores
+## Validación - primera variante, con excepciones
 
-Dado que al apostar los objetos de dominio apuesta pueden tirar errores de validación:
+Una primera alternativa es que el objeto de dominio apuesta tire excepciones por cada error de validación:
 
 ```typescript
 validarApuesta() {
@@ -235,7 +235,7 @@ validarApuesta() {
   }
 ```
 
-lo que hace el modelo de la vista es interceptar los errores y guardarlos en una variable _errorMessage_
+El modelo de la vista entonces intercepta los errores y los guarda en una variable _errorMessage_
 
 ```typescript
 apostar() {
@@ -257,6 +257,69 @@ que a su vez la vista muestra con un cartel en rojo (si la referencia tiene alg�
     </div>
   </div>
 ```
+
+## Validación - segunda variante, colección de mensajes de validación
+
+Una desventaja que tiene el approach anterior es que se lanza una excepción ante el primer error, de manera que el usuario al presionar el botón Apostar va recibiendo mensajes de a uno. Otra variante es agregar una colección de mensajes de validación en nuestro objeto de dominio Apuesta:
+
+```ts
+  validarApuesta() {
+    this.errors.length = 0 // TODO: add a helper function clear()
+    ...
+    if (this.monto <= 0) {
+      this.addError('monto', 'El monto a apostar debe ser positivo')
+    }
+    if (!this.tipoApuesta) {
+      this.addError('tipoApuesta', 'Debe ingresar tipo de apuesta')
+    } else {
+      this.tipoApuesta.validar(this)
+    }
+```
+
+Los errores independientes se van sumando a la lista de mensajes de validación (ahora necesitamos un tratamiento especial para asumir que el tipo de apuesta no puede ser nula para delegar la validación). `addError` es simplemente un método helper para crear un nuevo ValidationMessage:
+
+```ts
+export class ValidationMessage {
+  constructor(public field: string, public message: string) {}
+}
+
+export class Apuesta {
+  ...
+  addError(field: string, message: string) {
+    this.errors.push(new ValidationMessage(field, message))
+  }
+``` 
+
+En el html principal delegamos a otro componente que muestra los mensajes de error de un field (le pasa la apuesta y el nombre del campo):
+
+```html
+  <div class="md-form">
+    <h5 for="monto" class="grey-text">Monto</h5>
+    <input type="number" data-testid="monto" name="monto" ...>
+    <validation-field [apuesta]="apuesta" [field]="'monto'"></validation-field>
+  </div>
+```
+
+El componente ValidationField es sencillo, el html muestra un div el error del campo si existe (pueden ver los métodos en apuesta para determinar si hay errores para un campo o bien cuáles son esos errores de validación):
+
+```html
+<div class="md-form" *ngIf="apuesta.hasErrors(field)">
+  <div data-testid="errorMessage" class="validation alert alert-danger message">
+    {{apuesta.errorsFrom(field)}}
+  </div>
+</div>
+```
+
+Recibimos como @Input la apuesta y el nombre del campo:
+
+```ts
+export class ValidationFieldComponent {
+  @Input() apuesta!: Apuesta
+  @Input() field!: string
+}
+``` 
+
+A futuro podríamos extraer un componente más general, encontrando una abstracción que también sea más general: un objeto de nuestro dominio podría tener la colección de errores, métodos para agregar un error de validación, determinar si hay un error para ese campo, etc.
 
 ## Resultado de la apuesta
 
@@ -324,7 +387,7 @@ Al no cargar alguno de los valores estamos testeando que se visualice el mensaje
     )
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
-    expect(mensajeDeError(fixture)).toContain('El monto a apostar debe ser positivo')
+    expect(mensajeDeError(fixture, 'monto')).toContain('El monto a apostar debe ser positivo')
   }))
 ```
 

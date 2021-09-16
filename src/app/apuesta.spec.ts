@@ -12,27 +12,36 @@ describe('Apuesta', () => {
   })
   it('apuesta sin fecha tira error', () => {
     const apuestaSinFecha = new Apuesta()
-    expect(() => apuestaSinFecha.validarApuesta()).toThrow("Debe ingresar una fecha de apuesta")
+    apuestaSinFecha.validarApuesta()
+    expect(apuestaSinFecha.errorsFrom('fecha')).toBe('Debe ingresar una fecha de apuesta')
   })
   it('apuesta con monto negativo tira error', () => {
     const apuestaMontoNegativo = new Apuesta()
     apuestaMontoNegativo.fecha = new Date()
     apuestaMontoNegativo.monto = -20
-    expect(() => apuestaMontoNegativo.validarApuesta()).toThrow("El monto a apostar debe ser positivo")
+    apuestaMontoNegativo.tipoApuesta = undefined
+    apuestaMontoNegativo.validarApuesta()
+    expect(apuestaMontoNegativo.errorsFrom('monto')).toBe('El monto a apostar debe ser positivo')
+    apuestaMontoNegativo.tipoApuesta = PLENO
+    apuestaMontoNegativo.validarApuesta()
+    expect(apuestaMontoNegativo.errorsFrom('monto')).toBe('El monto a apostar debe ser positivo. Debe apostar más de 10 $')
   })
   it('apuesta sin tipo de apuesta tira error', () => {
     const apuestaSinTipoApuesta = new Apuesta()
     apuestaSinTipoApuesta.fecha = new Date()
     apuestaSinTipoApuesta.monto = 40
     apuestaSinTipoApuesta.tipoApuesta = undefined
-    expect(() => apuestaSinTipoApuesta.validarApuesta()).toThrow("Debe ingresar tipo de apuesta")
+    apuestaSinTipoApuesta.validarApuesta()
+    expect(apuestaSinTipoApuesta.errorsFrom('tipoApuesta')).toBe('Debe ingresar tipo de apuesta')
   })
   it('apuesta sin valor apostado tira error', () => {
     const apuestaSinValorApostado = new Apuesta()
     apuestaSinValorApostado.fecha = new Date()
     apuestaSinValorApostado.monto = 5
     apuestaSinValorApostado.tipoApuesta = PLENO
-    expect(() => apuestaSinValorApostado.validarApuesta()).toThrow("Debe ingresar valor a apostar")
+    apuestaSinValorApostado.validarApuesta()
+    expect(apuestaSinValorApostado.hasErrors('valorAApostar')).toBeTruthy()
+    expect(apuestaSinValorApostado.errorsFrom('valorAApostar')).toBe('Debe ingresar valor a apostar')
   })
   it('apuesta pleno con poco monto tira error', () => {
     const apuestaPleno = new Apuesta()
@@ -40,7 +49,8 @@ describe('Apuesta', () => {
     apuestaPleno.monto = 10
     apuestaPleno.tipoApuesta = PLENO
     apuestaPleno.valorApostado = 2
-    expect(() => apuestaPleno.validarApuesta()).toThrow("Debe apostar más de 10 $")
+    apuestaPleno.validarApuesta()
+    expect(apuestaPleno.errorsFrom('monto')).toBe('Debe apostar más de 10 $')
   })
   it('apuesta docena con poco monto tira error', () => {
     const apuestaPleno = new Apuesta()
@@ -48,6 +58,7 @@ describe('Apuesta', () => {
     apuestaPleno.monto = 50
     apuestaPleno.tipoApuesta = DOCENA
     apuestaPleno.valorApostado = 2
-    expect(() => apuestaPleno.validarApuesta()).toThrow("Debe apostar más de 50 $")
+    apuestaPleno.validarApuesta()
+    expect(apuestaPleno.errorsFrom('monto')).toBe('Debe apostar más de 50 $')
   })
 })

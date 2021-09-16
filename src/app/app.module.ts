@@ -5,11 +5,13 @@ import { BrowserModule } from '@angular/platform-browser'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 import { AppComponent } from './app.component'
+import { ValidationFieldComponent } from './validationField/validationField.component'
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [	
+    AppComponent,
+    ValidationFieldComponent,
+   ],
   imports: [
     BrowserModule,
     FormsModule,

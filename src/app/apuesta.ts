@@ -7,7 +7,7 @@ export class Pleno {
 
   validar(apuesta: Apuesta) {
     if (apuesta.monto <= 10) {
-      throw 'Debe apostar más de 10 $'
+      apuesta.addError('monto', 'Debe apostar más de 10 $')
     }
   }
 
@@ -23,7 +23,7 @@ export class Docena {
 
   validar(apuesta: Apuesta) {
     if (apuesta.monto <= 50) {
-      throw 'Debe apostar más de 50 $'
+      apuesta.addError('monto', 'Debe apostar más de 50 $')
     }
   }
 
@@ -45,37 +45,59 @@ export type TipoApuesta = {
 export const PLENO = new Pleno()
 export const DOCENA = new Docena()
 
+export class ValidationMessage {
+  constructor(public field: string, public message: string) {}
+}
+
 export class Apuesta {
   fecha: Date | undefined
   monto = 0
   tipoApuesta: TipoApuesta | undefined = PLENO
   valorApostado!: string | number
   resultado: Resultado | null = null
+  errors: ValidationMessage[] = []
+
+  hasErrors(field: string): boolean {
+    return this.errors.some((_) => _.field == field)
+  }
+
+  errorsFrom(field: string) {
+    return this.errors.filter((_) => _.field == field).map((_) => _.message).join(". ")
+  }
+
+
+  addError(field: string, message: string) {
+    this.errors.push(new ValidationMessage(field, message))
+  }
 
   validarApuesta() {
+    this.errors.length = 0 // TODO: add a helper function
     const now = new Date()
     now.setHours(0, 0, 0, 0)
     if (!this.fecha) {
-      throw 'Debe ingresar una fecha de apuesta'
-    }
-    if (now.getTime() > this.fecha.getTime()) {
-      throw 'Debe ingresar una fecha actual o posterior al día de hoy'
+      this.addError('fecha', 'Debe ingresar una fecha de apuesta')
+    } else {
+      if (now.getTime() > this.fecha.getTime()) {
+        this.addError('fecha', 'Debe ingresar una fecha actual o posterior al día de hoy')
+      }
     }
     if (this.monto <= 0) {
-      throw 'El monto a apostar debe ser positivo'
+      this.addError('monto', 'El monto a apostar debe ser positivo')
     }
     if (!this.tipoApuesta) {
-      throw 'Debe ingresar tipo de apuesta'
+      this.addError('tipoApuesta', 'Debe ingresar tipo de apuesta')
+    } else {
+      this.tipoApuesta.validar(this)
     }
     if (!this.valorApostado) {
-      throw 'Debe ingresar valor a apostar'
+      this.addError('valorAApostar', 'Debe ingresar valor a apostar')
     }
-    this.tipoApuesta.validar(this)
   }
 
   apostar() {
     this.resultado = null
     this.validarApuesta()
+    if (this.errors.length > 0) return
     const numeroGanador = this.obtenerNumeroGanador()
     const ganancia = this.calcularGanancia(numeroGanador)
     this.resultado = new Resultado(numeroGanador, ganancia)

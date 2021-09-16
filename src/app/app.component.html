@@ -1,9 +1,4 @@
 <form #apuestasForm="ngForm" class="form-control">
-  <div class="md-form" *ngIf="errorMessage">
-    <div data-testid="errorMessage" class="alert alert-danger message">
-      {{errorMessage}}
-    </div>
-  </div>
   <div class="title">
     <p class="h3 text-center">Apuestas de Ruleta</p>
   </div>
@@ -27,11 +22,13 @@
         </button>
       </div>
     </div>
+    <validation-field [apuesta]="apuesta" [field]="'fecha'"></validation-field>
   </div>
   <div class="md-form">
     <h5 for="monto" class="grey-text">Monto</h5>
     <input type="number" data-testid="monto" name="monto" class="form-control" [(ngModel)]="apuesta.monto"
       placeholder="Monto en $" required="true">
+    <validation-field [apuesta]="apuesta" [field]="'monto'"></validation-field>
   </div>
   <div class="md-form">
     <h5 for="tipoApuesta" class="grey-text">Tipo de Apuesta</h5>
@@ -39,6 +36,7 @@
       required="true">
       <option *ngFor="let tipo of tiposApuesta" [ngValue]="tipo">{{tipo.descripcion}}</option>
     </select>
+    <validation-field [apuesta]="apuesta" [field]="'tipoApuesta'"></validation-field>
   </div>
   <div class="md-form">
     <h5 for="apuesta" class="grey-text">Qu&eacute; apost&aacute;s</h5>
@@ -46,6 +44,7 @@
       [disabled]="!apuesta.tipoApuesta?.valoresAApostar" required="true">
       <option *ngFor="let valor of apuesta.tipoApuesta?.valoresAApostar" [ngValue]="valor">{{valor}}</option>
     </select>
+    <validation-field [apuesta]="apuesta" [field]="'valorAApostar'"></validation-field>
   </div>
   <div class="md-form">
     <button class="btn btn-primary" data-testid="btnApuesta" (click)="apostar()" type="submit">Apostar</button>

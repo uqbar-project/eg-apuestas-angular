@@ -1,0 +1,5 @@
+<div class="md-form" *ngIf="apuesta.hasErrors(field)">
+  <div [attr.data-testid]="'errorMessage-' + field" class="validation alert alert-danger message">
+    {{apuesta.errorsFrom(field)}}
+  </div>
+</div>

@@ -1,3 +1,4 @@
+import { ValidationFieldComponent } from './validationField/validationField.component'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormsModule } from '@angular/forms'
 import { BrowserModule } from '@angular/platform-browser'
@@ -16,7 +17,8 @@ describe('AppComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent
+        AppComponent,
+        ValidationFieldComponent,
       ],
       imports: [
         AngularMyDatePickerModule,
@@ -34,7 +36,7 @@ describe('AppComponent', () => {
   it('should fail if no date is entered', () => {
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
-    expect(mensajeDeError(fixture)).toContain('Debe ingresar una fecha de apuesta')
+    expect(mensajeDeError(fixture, 'fecha')).toContain('Debe ingresar una fecha de apuesta')
   })
   it('should fail if previous date is entered', () => {
     app.apuesta = Object.assign(
@@ -45,7 +47,7 @@ describe('AppComponent', () => {
     )
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
-    expect(mensajeDeError(fixture)).toContain('Debe ingresar una fecha actual o posterior al día de hoy')
+    expect(mensajeDeError(fixture, 'fecha')).toContain('Debe ingresar una fecha actual o posterior al día de hoy')
   })
   it('should fail if negative amount is entered', () => {
     app.apuesta = Object.assign(
@@ -57,7 +59,7 @@ describe('AppComponent', () => {
     )
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
-    expect(mensajeDeError(fixture)).toContain('El monto a apostar debe ser positivo')
+    expect(mensajeDeError(fixture, 'monto')).toContain('El monto a apostar debe ser positivo')
   })
   it('should pass all validations and inform if user wins - single', () => {
     app.apuesta = apostarAl(PLENO, 25)
