@@ -39,7 +39,7 @@
     <validation-field [apuesta]="apuesta" [field]="'tipoApuesta'"></validation-field>
   </div>
   <div class="md-form">
-    <h5 for="apuesta" class="grey-text">Qu&eacute; apost&aacute;s</h5>
+    <h5 for="apuesta" class="grey-text">Qué apostás</h5>
     <select name="apuesta" data-testid="apuesta" class="form-control" [(ngModel)]="apuesta.valorApostado"
       [disabled]="!apuesta.tipoApuesta?.valoresAApostar" required="true">
       <option *ngFor="let valor of apuesta.tipoApuesta?.valoresAApostar" [ngValue]="valor">{{valor}}</option>
