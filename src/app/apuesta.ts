@@ -74,6 +74,7 @@ export class Apuesta {
     this.errors.length = 0 // TODO: add a helper function
     const now = new Date()
     now.setHours(0, 0, 0, 0)
+    console.info('fecha', this.fecha);
     if (!this.fecha) {
       this.addError('fecha', 'Debe ingresar una fecha de apuesta')
     } else {

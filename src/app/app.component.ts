@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
-import { faCalendar, faCalendarTimes } from '@fortawesome/free-solid-svg-icons'
-import { IAngularMyDpOptions, IMyDateModel } from 'angular-mydatepicker'
 
 import { Apuesta, DOCENA, PLENO } from './apuesta'
+import { IDatePickerConfig, ISelectionEvent } from 'ng2-date-picker'
+import * as dayjs from 'dayjs'
 
 @Component({
   selector: 'app-root',
@@ -10,36 +10,25 @@ import { Apuesta, DOCENA, PLENO } from './apuesta'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'app'
+
   apuesta = new Apuesta()
-  opcionesFecha!: IAngularMyDpOptions
+  opcionesFecha!: IDatePickerConfig
+  fechaApostada: any
   tiposApuesta = [PLENO, DOCENA]
-  faCalendar = faCalendar
-  faCalendarTimes = faCalendarTimes
+  cssClass = "fecha"
 
   apostar() {
+    console.info('aposta', this.fechaApostada)
+    this.apuesta.fecha = this.fechaApostada.$d
+
     this.apuesta.apostar()
   }
 
   ngOnInit() {
-    const ayer = new Date()
-    ayer.setDate(ayer.getDate() - 1)
     this.opcionesFecha = {
-      dateFormat: 'dd/mm/yyyy',
-      disableUntil: this.dateToJson(ayer),
-      dateRange: false,
+      min: dayjs(new Date()),
+      format: 'DD/MM/YYYY',
     }
   }
 
-  dateToJson(fecha: Date) {
-    return {
-      year: fecha.getFullYear(),
-      month: fecha.getMonth() + 1,
-      day: fecha.getDate()
-    }
-  }
-
-  dateSelected(event: IMyDateModel): void {
-    this.apuesta.fecha = event.singleDate?.jsDate
-  }
 }
