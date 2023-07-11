@@ -1,9 +1,9 @@
 .validation-row {
-  background-color: lightcoral;
-  border-color: darkred;
-  color: white;
-  font-size: 0.8em;
-  height: 2em;
+  background-color: lightsalmon;
+  border: 1px solid darkred;
+  color: darkred;
+  font-size: 0.7em;
+  height: 1.7em;
   display: flex;
   flex-direction: row;
   padding: 0.5em;

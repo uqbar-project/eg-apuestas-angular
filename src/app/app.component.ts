@@ -18,10 +18,11 @@ export class AppComponent implements OnInit {
   cssClass = "fecha"
 
   apostar() {
-    console.info('aposta', this.fechaApostada)
-    this.apuesta.fecha = this.fechaApostada.$d
-
     this.apuesta.apostar()
+  }
+
+  dateSelected(event: ISelectionEvent) {
+    this.apuesta.fecha = this.fechaApostada?.$d
   }
 
   ngOnInit() {

@@ -7,17 +7,18 @@ import { AppComponent } from './app.component'
 import { ValidationFieldComponent } from './validationField/validationField.component'
 import { DpDatePickerModule } from 'ng2-date-picker'
 
+export const importedModules = [
+  BrowserModule,
+  FormsModule,
+  DpDatePickerModule,
+  FontAwesomeModule,
+]
 @NgModule({
   declarations: [	
     AppComponent,
     ValidationFieldComponent,
    ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    DpDatePickerModule,
-    FontAwesomeModule,
-  ],
+  imports: importedModules,
   providers: [],
   bootstrap: [AppComponent]
 })

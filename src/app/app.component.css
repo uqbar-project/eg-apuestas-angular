@@ -64,6 +64,6 @@ select, input {
 
 .message {
   background-color: lightgreen;
-  border-color: darkolivegreen;
+  border: solid 1px green;
   font-size: 0.9rem;
 }
