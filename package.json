@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "eslint \"**/*.{ts,tsx}\" ",
+    "lint:fix": "eslint --fix \"**/*.{ts,tsx}\" ",
     "build:prod": "ng build --prod",
     "test:prod": "ng test --browsers=ChromeHeadless --watch=false --code-coverage"
   },

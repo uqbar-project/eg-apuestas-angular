@@ -13,7 +13,6 @@ export class AppComponent implements OnInit {
 
   apuesta = new Apuesta()
   opcionesFecha!: IDatePickerConfig
-  fechaApostada: any
   tiposApuesta = [PLENO, DOCENA]
   cssClass = "fecha"
 
@@ -22,7 +21,7 @@ export class AppComponent implements OnInit {
   }
 
   dateSelected(event: ISelectionEvent) {
-    this.apuesta.fecha = this.fechaApostada?.$d
+    this.apuesta.fecha = dayjs(event.date).toDate()
   }
 
   ngOnInit() {
