@@ -1,4 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~@angular/cdk/overlay-prebuilt.css';
+
 * {
   font-family: 'Inter', sans-serif;
+}
+
+/* Customizaciones para el date picker */
+.fecha * input {
+  height: 2em;
+  color: black;
+}
+
+.dp-calendar-nav-left, .dp-calendar-nav-right {
+  border: 0;
+  background-color: white;
 }

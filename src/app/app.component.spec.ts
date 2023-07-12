@@ -1,14 +1,11 @@
-import { ValidationFieldComponent } from './validationField/validationField.component'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { FormsModule } from '@angular/forms'
-import { BrowserModule } from '@angular/platform-browser'
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
-import { AngularMyDatePickerModule } from 'angular-mydatepicker'
+import { ValidationFieldComponent } from './validationField/validationField.component'
 
 import { AppComponent } from './app.component'
-import { Apuesta, PLENO, DOCENA, TipoApuesta } from './apuesta'
-import { getByTestId, mensajeDeError, resultado } from './test-utils'
 import './app.module'
+import { importedModules } from './app.module'
+import { Apuesta, DOCENA, PLENO, TipoApuesta } from './apuesta'
+import { getByTestId, mensajeDeError, resultado } from './test-utils'
 
 let fixture: ComponentFixture<AppComponent>
 let app: AppComponent
@@ -20,12 +17,7 @@ describe('AppComponent', () => {
         AppComponent,
         ValidationFieldComponent,
       ],
-      imports: [
-        AngularMyDatePickerModule,
-        BrowserModule,
-        FormsModule,
-        FontAwesomeModule,
-      ],
+      imports: importedModules,
     }).compileComponents()
     fixture = TestBed.createComponent(AppComponent)
     app = fixture.debugElement.componentInstance

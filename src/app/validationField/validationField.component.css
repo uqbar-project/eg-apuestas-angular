@@ -1,3 +1,12 @@
-.validation {
-  padding: 1rem;
+.validation-row {
+  background-color: lightsalmon;
+  border: 1px solid darkred;
+  color: darkred;
+  font-size: 0.7em;
+  height: 1.7em;
+  display: flex;
+  flex-direction: row;
+  padding: 0.5em;
+  margin: 0.5em 0;
+  align-items: center;
 }
