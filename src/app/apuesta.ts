@@ -1,6 +1,6 @@
 import { Resultado } from './resultado'
 
-export class Pleno {
+class Pleno {
   ganancia = 35
   descripcion = 'Pleno'
   valoresAApostar = Array.from(new Array(36), (value, index) => index + 1)
@@ -16,7 +16,7 @@ export class Pleno {
   }
 }
 
-export class Docena {
+class Docena {
   ganancia = 11
   descripcion = 'Docena'
   valoresAApostar = ['Primera', 'Segunda', 'Tercera']

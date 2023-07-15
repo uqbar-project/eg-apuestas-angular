@@ -5,11 +5,11 @@
 
 Esta aplicación permite mostrar cómo funciona el binding bidireccional.
 
-<img src="images/demo4.gif" height="50%" width="50%">
+<img src="images/demo4.gif" height="70%" width="70%">
 
 # Creación de la aplicación
 
-Creamos la aplicación con Angular CLI y agregamos las dependencias de Material Design for Bootstrap y MyDatePicker para contar con un control calendario (pueden ver [la documentación oficial aquí](https://github.com/kekeh/mydatepicker)).
+Creamos la aplicación con Angular CLI y agregamos la dependencia del DatePicker para contar con un control calendario (pueden ver [la documentación oficial aquí](https://github.com/vlio20/angular-datepicker)).
 
 # Arquitectura general
 
@@ -19,90 +19,61 @@ Se desarrolló la página principal en el componente raíz original app.componen
 
 # Vista principal
 
-La vista tiene tags propios del framework Material Design for Bootstrap. El binding es bidireccional para cargar todos los datos de una apuesta: fecha, monto, tipo de apuesta y valor apostado. Cuando el formulario tiene un error se visualiza dicho error con un cartel rojo (alert-danger), y cuando el usuario decide apostar se le informa si ganó o perdió con un cartel azul (alert-info).
+La vista tiene tags customs para el manejo espacial. La selección de la fecha es un control que visualmente no es la gran cosa pero funciona mejor que el componente que usábamos antes del 2023 ([MyDatePicker](https://www.npmjs.com/package/angular-mydatepicker)) que tiene inconvenientes con Angular 15+. El binding es bidireccional para cargar todos los datos de una apuesta: fecha, monto, tipo de apuesta y valor apostado. Cuando el formulario tiene un error se visualiza dicho error con un cartel rojo (alert-danger), y cuando el usuario decide apostar se le informa si ganó o perdió con un cartel azul (alert-info).
+
+Un detalle adicional es que cuando cambiamos la selección del tipo de apuesta blanqueamos manualmente la selección del valor apostado, para que queden en todo momento sincronizados.
 
 ## Ingreso de una fecha
 
 Para cargar la fecha manualmente y además abrir un calendario en un formulario modal, utilizamos el control angular-mydatepicker, de la siguiente manera:
 
 ```html
-<input class="form-control" name="fechaApuesta" data-testid="fechaApuesta" placeholder="Select a date"
-  angular-mydatepicker #dp="angular-mydatepicker" [options]="opcionesFecha"
-  (dateChanged)="dateSelected($event)" required />
-<!-- clear date button -->
-<div class="input-group-append">
-  <button type="button" class="btn btn-secondary" *ngIf="apuesta.fecha" (click)="dp.clearDate()">
-    <fa-icon [icon]="faCalendarTimes"></fa-icon>
-  </button>
-</div>
-
-<!-- toggle calendar button -->
-<div class="input-group-append">
-  <button type="button" class="btn btn-primary" (click)="dp.toggleCalendar()">
-    <fa-icon [icon]="faCalendar"></fa-icon>
-  </button>
-</div>
+    <dp-date-picker [config]="opcionesFecha" (onSelect)="dateSelected($event)" [ngClass]="cssClass"
+    name="fechaApuesta" data-testid="fechaApuesta" placeholder="Select a date"></dp-date-picker>
+    <validation-field [apuesta]="apuesta" [field]="'fecha'"></validation-field>
 ```
 
-Esto requiere hacer imports en nuestro ngModule, que incluyen la biblioteca de íconos Font Awesome para poder utilizarlos:
+Esto requiere hacer imports en nuestro módulo principal (y también a los tests):
 
 ```typescript
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
-import { AngularMyDatePickerModule } from 'angular-mydatepicker'
+import { DpDatePickerModule } from 'ng2-date-picker'
 
+export const importedModules = [
+  BrowserModule,
+  FormsModule,
+  DpDatePickerModule,
+]
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    ...,
-    AngularMyDatePickerModule,
-    FontAwesomeModule
-  ],
+  declarations: [	
+    AppComponent,
+    ValidationFieldComponent,
+   ],
+  imports: importedModules,
   ...
 ```
 
 A su vez, el modelo de la vista (el _app.component.ts_) define
 
-- imports para poder utilizar el ícono que levanta el calendario, y el que borra la fecha
-- a su vez, el calendario se puede configurar con la referencia `opcionesFecha`, por ejemplo para decirle qué formato utilizar para mostrar las fechas o cuál es la mínima fecha que pueden ingresar
-
-En el evento onInit configuramos estas dos propiedades. Para el caso de las opciones del calendario, se deshabilitan fechas hasta el día de ayer:
+- en el evento onInit, cuál es el valor mínimo que se puede ingresar (solo a partir de la fecha de hoy)
+- y cuando el usuario selecciona la fecha, se dispara el evento dateSelected donde se asigna la fecha del calendario en la fecha del modelo
 
 ```typescript
 export class AppComponent implements OnInit {
+
   ...
-  opcionesFecha: IAngularMyDpOptions
-  faCalendar = faCalendar
-  faCalendarTimes = faCalendarTimes
+  opcionesFecha!: IDatePickerConfig
+
+  dateSelected(event: ISelectionEvent) {
+    this.apuesta.fecha = dayjs(event.date).toDate()
+  }
 
   ngOnInit() {
-    const ayer = new Date()
-    ayer.setDate(ayer.getDate() - 1)
     this.opcionesFecha = {
-      dateFormat: 'dd/mm/yyyy',
-      disableUntil: this.dateToJson(ayer),
-      dateRange: false,
+      min: dayjs(new Date()),
+      format: 'DD/MM/YYYY',
     }
-  }
-
-  dateToJson(fecha: Date) {
-    return {
-      year: fecha.getFullYear(),
-      month: fecha.getMonth() + 1,
-      day: fecha.getDate()
-    }
-  }
-
-  dateSelected(event: any): void {
-    this.apuesta.fecha = event.singleDate.jsDate
   }
 ```
-
-Tenemos dos métodos que adaptan el modelo del calendario al de la apuesta:
-
-- el método `dateSelected` se dispara cuando el usuario selecciona una fecha en el calendario (véanlo en el HTML)
-- el método `dateToJson` transforma un Date de javascript en la fecha JSON que utiliza el framework myDatePicker. Esto nos sirve para no permitir la selección de una fecha anterior a la de hoy.
 
 # Combos anidados
 
@@ -144,9 +115,8 @@ export class Apuesta {
 Veamos cómo se define el selector HTML en la vista:
 
 ```html
-<h5 for="tipoApuesta" class="grey-text">Tipo de Apuesta</h5>
 <select data-testid="tipoApuesta" name="tipoApuesta" class="form-control" [(ngModel)]="apuesta.tipoApuesta"
-  required="true">
+  required="true" (ngModelChange)="apuesta.valorApostado = ''">
   <option *ngFor="let tipo of tiposApuesta" [ngValue]="tipo">{{tipo.descripcion}}</option>
 </select>
 ```
@@ -170,11 +140,11 @@ Por otra parte, los valores a apostar son numéricos, lo que evita nuevas copias
 ```html
 <select name="apuesta" data-testid="apuesta" class="form-control" [(ngModel)]="apuesta.valorApostado"
   [disabled]="!apuesta.tipoApuesta?.valoresAApostar" required="true">
-  <option *ngFor="let valor of apuesta.tipoApuesta?.valoresAApostar" [ngValue]="valor">{{valor}}</option>
+  ...
 </select>
 ```
 
-Es interesante que las opciones salen de "apuesta.tipoApuesta.valoresAApostar", por lo tanto, cuando modificamos la selección del tipo de apuesta en el primer combo, eso dispara una nueva lista de opciones para el segundo combo.
+Es interesante que las opciones salen de "apuesta.tipoApuesta?.valoresAApostar", por lo tanto, cuando modificamos la selección del tipo de apuesta en el primer combo, eso dispara una nueva lista de opciones para el segundo combo.
 
 Un detalle adicional, se puede bindear el modelo de cada opción (ngValue) vs. el valor a mostrar (el html encerrado entre los tags _option_):
 
@@ -248,14 +218,14 @@ apostar() {
 }
 ```
 
-que a su vez la vista muestra con un cartel en rojo (si la referencia tiene algún valor)
+que a su vez la vista muestra con un cartel en rojo (si la referencia tiene algún valor), en un componente aparte llamado `validationField`:
 
 ```html
-<div class="md-form" *ngIf="errorMessage">
-    <div data-testid="errorMessage" class="alert alert-danger message">
-      {{errorMessage}}
-    </div>
+<div class="validation-row" *ngIf="apuesta.hasErrors(field)">
+  <div [attr.data-testid]="'errorMessage-' + field" class="validation">
+    {{apuesta.errorsFrom(field)}}
   </div>
+</div>
 ```
 
 ## Validación - segunda variante, colección de mensajes de validación
@@ -263,17 +233,17 @@ que a su vez la vista muestra con un cartel en rojo (si la referencia tiene alg�
 Una desventaja que tiene el approach anterior es que se lanza una excepción ante el primer error, de manera que el usuario al presionar el botón Apostar va recibiendo mensajes de a uno. Otra variante es agregar una colección de mensajes de validación en nuestro objeto de dominio Apuesta:
 
 ```ts
-  validarApuesta() {
-    this.errors.length = 0 // TODO: add a helper function clear()
-    ...
-    if (this.monto <= 0) {
-      this.addError('monto', 'El monto a apostar debe ser positivo')
-    }
-    if (!this.tipoApuesta) {
-      this.addError('tipoApuesta', 'Debe ingresar tipo de apuesta')
-    } else {
-      this.tipoApuesta.validar(this)
-    }
+validarApuesta() {
+  this.errors.length = 0 // TODO: add a helper function clear()
+  ...
+  if (this.monto <= 0) {
+    this.addError('monto', 'El monto a apostar debe ser positivo')
+  }
+  if (!this.tipoApuesta) {
+    this.addError('tipoApuesta', 'Debe ingresar tipo de apuesta')
+  } else {
+    this.tipoApuesta.validar(this)
+  }
 ```
 
 Los errores independientes se van sumando a la lista de mensajes de validación (ahora necesitamos un tratamiento especial para asumir que el tipo de apuesta no puede ser nula para delegar la validación). `addError` es simplemente un método helper para crear un nuevo ValidationMessage:
@@ -288,16 +258,12 @@ export class Apuesta {
   addError(field: string, message: string) {
     this.errors.push(new ValidationMessage(field, message))
   }
-``` 
+```
 
 En el html principal delegamos a otro componente que muestra los mensajes de error de un field (le pasa la apuesta y el nombre del campo):
 
 ```html
-  <div class="md-form">
-    <h5 for="monto" class="grey-text">Monto</h5>
-    <input type="number" data-testid="monto" name="monto" ...>
-    <validation-field [apuesta]="apuesta" [field]="'monto'"></validation-field>
-  </div>
+<validation-field [apuesta]="apuesta" [field]="'monto'"></validation-field>
 ```
 
 El componente ValidationField es sencillo, el html muestra un div el error del campo si existe (pueden ver los métodos en apuesta para determinar si hay errores para un campo o bien cuáles son esos errores de validación):
@@ -319,16 +285,16 @@ export class ValidationFieldComponent {
 }
 ``` 
 
-A futuro podríamos extraer un componente más general, encontrando una abstracción que también sea más general: un objeto de nuestro dominio podría tener la colección de errores, métodos para agregar un error de validación, determinar si hay un error para ese campo, etc.
-
 ## Resultado de la apuesta
 
 Una vez pasadas las validaciones, se genera un objeto Resultado dentro del objeto apuesta, que se visualiza en la vista, de igual manera que con el mensaje de error:
 
 ```html
-  <div class="alert alert-info" data-testid="resultado" *ngIf="apuesta.resultado">
+<div class="row">
+  <div class="message" data-testid="resultado" *ngIf="apuesta.resultado">
     {{apuesta.resultado.valor()}}
   </div>
+</div>
 ```
 
 # Testing
@@ -347,66 +313,41 @@ Para destacar, tenemos tests unitarios sobre la apuesta, para chequear que el pr
 
 ## Testeo del componente
 
-Además tenemos el testeo del componente principal, que delega al objeto de dominio Apuesta pero que también incluye la respuesta html. Por ejemplo, podemos probar que si el objeto Apuesta está bien construido, se visualiza el resultado en un class "alert-info". Como en los ejemplos anteriores, identificamos los elementos del formulario mediante el atributo `data-testid`:
+Además tenemos el testeo del componente principal, que delega al objeto de dominio Apuesta pero que también incluye la respuesta html. Por ejemplo, podemos probar que si el objeto Apuesta está bien construido, se visualiza el resultado en un class especial. Como en los ejemplos anteriores, identificamos los elementos del formulario mediante el atributo `data-testid`:
 
 ```ts
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ AppComponent ],
-      imports: [ ... ],
+      declarations: [
+        AppComponent,
+        ValidationFieldComponent,
+      ],
+      imports: importedModules,
     }).compileComponents()
     fixture = TestBed.createComponent(AppComponent)
     app = fixture.debugElement.componentInstance
-  }))
-  it('should pass all validations and inform user win/loose result', async(() => {
-    app.apuesta = Object.assign(
-      new Apuesta(),
-      {
-        fecha: new Date(),
-        monto: 60,
-        tipoApuesta: PLENO,
-        valorApostado: 25,
-      }
-    )
+  })
+  it('should pass all validations and inform if user wins - single', () => {
+    app.apuesta = apostarAl(PLENO, 25)
+    app.apuesta.obtenerNumeroGanador = () => 25
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
-    expect(resultado(fixture)).toBeTruthy()
-  }))
-```
 
-Al no cargar alguno de los valores estamos testeando que se visualice el mensaje de error. El lector puede pensar que hay cierta duplicidad respecto al anterior test unitario de la apuesta, pero este test es más global: no estamos esperando una excepción de apuesta, sino un mensaje dentro de un div, lo que implica que estamos validando que el componente principal de la aplicación captura el error adecuadamente.
-
-```ts
-  it('should fail if negative amount is entered', async(() => {
-    app.apuesta = Object.assign(
-      new Apuesta(),
-      {
-        fecha: new Date(),
-        monto: -10,
-      }
-    )
+    expect(resultado(fixture)).toContain('Ganaste $700')
+  })
+  it('should pass all validations and inform if user looses - single', () => {
+    app.apuesta = apostarAl(PLENO, 25)
+    app.apuesta.obtenerNumeroGanador = () => 24
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
-    expect(mensajeDeError(fixture, 'monto')).toContain('El monto a apostar debe ser positivo')
-  }))
+
+    expect(resultado(fixture)).toContain('¡¡Perdiste!! Salió el 24')
+  })
 ```
 
-Recordemos que el archivo de tests del componente debe replicar los imports del ngModule.
+Dado que Javascript es un lenguaje dinámico, podemos cambiar el método obtenerNumeroGanador para que devuelva el valor que nosotros queremos dentro del test en lugar de uno al azar. 
 
-Y por último, mostramos cómo podemos asegurar que una apuesta puede ser ganadora (lo mismo para ser perdedora):
-
-```ts
-it('should pass all validations and inform if user wins - single', () => {
-  app.apuesta = apostarAl(PLENO, 25)
-  app.apuesta.obtenerNumeroGanador = () => 25
-  getByTestId(fixture, 'btnApuesta').click()
-  fixture.detectChanges()
-
-  expect(resultado(fixture)).toContain('Ganaste $700')
-})
-```
-
-Dada la naturaleza dinámica de typescript, podemos redefinir el comportamiento del método obtenerNumeroGanador para que devuelva siempre 25 dentro del contexto del test.
+> Una cuestión importante es que este método debería volver para atrás los cambios en el beforeEach, algo que por el momento no está haciendo.
 
 ## Material adicional
 
