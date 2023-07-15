@@ -13,6 +13,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+                "dayjs"
+            ],
             "outputPath": "dist/eg-apuestas-angular",
             "index": "src/index.html",
             "main": "src/main.ts",

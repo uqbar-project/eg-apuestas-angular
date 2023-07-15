@@ -18,7 +18,7 @@
   <div class="row">
     <label for="tipoApuesta">Tipo de Apuesta</label>
     <select data-testid="tipoApuesta" name="tipoApuesta" class="form-control" [(ngModel)]="apuesta.tipoApuesta"
-      required="true">
+      required="true" (ngModelChange)="apuesta.valorApostado = ''">
       <option *ngFor="let tipo of tiposApuesta" [ngValue]="tipo">{{tipo.descripcion}}</option>
     </select>
     <validation-field [apuesta]="apuesta" [field]="'tipoApuesta'"></validation-field>

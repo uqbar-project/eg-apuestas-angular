@@ -1,11 +1,11 @@
-# Apuestas de una ruleta
+# Apuestas de una ruleta (TODO: ACTUALIZAR)
 
 [![Build](https://github.com/uqbar-project/eg-apuestas-angular/actions/workflows/build.yml/badge.svg)](https://github.com/uqbar-project/eg-apuestas-angular/actions/workflows/build.yml) ![Coverage](./badges/eg-apuestas-angular/coverage.svg?time=1)
 
 
 Esta aplicación permite mostrar cómo funciona el binding bidireccional.
 
-<img src="images/demo3.gif" height="77%" width="77%">
+<img src="images/demo4.gif" height="50%" width="50%">
 
 # Creación de la aplicación
 
