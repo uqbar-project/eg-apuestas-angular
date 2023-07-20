@@ -6,7 +6,7 @@
     <label for="fecha" class="form-label">Fecha</label>
     <!-- https://github.com/vlio20/angular-datepicker/blob/master/README.md -->
     <dp-date-picker [config]="opcionesFecha" (onSelect)="dateSelected($event)" [ngClass]="cssClass"
-    name="fechaApuesta" data-testid="fechaApuesta" placeholder="Select a date"></dp-date-picker>
+    name="fechaApuesta" data-testid="fechaApuesta" placeholder="Fecha de apuesta"></dp-date-picker>
     <validation-field [apuesta]="apuesta" [field]="'fecha'"></validation-field>
   </div>
   <div class="row">
