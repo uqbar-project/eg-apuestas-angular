@@ -1,11 +1,11 @@
-# Apuestas de una ruleta (TODO: ACTUALIZAR)
+# Apuestas de una ruleta
 
 [![Build](https://github.com/uqbar-project/eg-apuestas-angular/actions/workflows/build.yml/badge.svg)](https://github.com/uqbar-project/eg-apuestas-angular/actions/workflows/build.yml) ![Coverage](./badges/eg-apuestas-angular/coverage.svg?time=1)
 
 
 Esta aplicación permite mostrar cómo funciona el binding bidireccional.
 
-<img src="images/demo4.gif" height="70%" width="70%">
+<img src="images/demo5.gif" height="70%" width="70%">
 
 # Creación de la aplicación
 
@@ -107,6 +107,7 @@ export const DOCENA = new Docena()
 ```
 
 A su vez la apuesta inicializa la referencia tipoApuesta como pleno:
+
 ```typescript
 export class Apuesta {
     tipoApuesta: TipoApuesta | undefined = PLENO
@@ -345,9 +346,22 @@ Además tenemos el testeo del componente principal, que delega al objeto de domi
   })
 ```
 
-Dado que Javascript es un lenguaje dinámico, podemos cambiar el método obtenerNumeroGanador para que devuelva el valor que nosotros queremos dentro del test en lugar de uno al azar. 
+Dado que Javascript es un lenguaje dinámico, podemos cambiar el método obtenerNumeroGanador para que devuelva el valor que nosotros queremos dentro del test en lugar de uno al azar:
 
-> Una cuestión importante es que este método debería volver para atrás los cambios en el beforeEach, algo que por el momento no está haciendo.
+```ts
+app.apuesta.obtenerNumeroGanador = () => 24
+```
+
+pero eso implica que al salir el test nuestra definición de obtenerNumeroGanador quedará fija en 24 (afectando a los demás tests que perderán la independencia). Para que eso no nos pase:
+
+1. podemos guardar la definición anterior de obtenerNumeroGanador en el beforeEach y pisarla en el afterEach
+2. o mejor utilizamos el spy de Jasmine que ya lo hace por nosotros:
+
+```ts
+spyOn(app.apuesta, "obtenerNumeroGanador").and.returnValue(24)
+```
+
+El lector puede ver cómo queda la definición final en el repositorio.
 
 ## Material adicional
 

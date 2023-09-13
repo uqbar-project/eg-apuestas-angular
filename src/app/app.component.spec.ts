@@ -55,7 +55,10 @@ describe('AppComponent', () => {
   })
   it('should pass all validations and inform if user wins - single', () => {
     app.apuesta = apostarAl(PLENO, 25)
-    app.apuesta.obtenerNumeroGanador = () => 25
+    spyOn(app.apuesta, "obtenerNumeroGanador").and.returnValue(25)
+    // se podría hacer a mano pero hay que deshacer esto al final del test
+    // o produciría efecto colateral => el número ganador sería siempre 24
+    // app.apuesta.obtenerNumeroGanador = () => 25
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
 
@@ -63,7 +66,7 @@ describe('AppComponent', () => {
   })
   it('should pass all validations and inform if user looses - single', () => {
     app.apuesta = apostarAl(PLENO, 25)
-    app.apuesta.obtenerNumeroGanador = () => 24
+    spyOn(app.apuesta, "obtenerNumeroGanador").and.returnValue(24)
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
 
@@ -71,7 +74,7 @@ describe('AppComponent', () => {
   })
   it('should pass all validations and inform if user wins - dozen', () => {
     app.apuesta = apostarAl(DOCENA, 'Primera', 100)
-    app.apuesta.obtenerNumeroGanador = () => 1
+    spyOn(app.apuesta, "obtenerNumeroGanador").and.returnValue(1)
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
 
@@ -79,7 +82,7 @@ describe('AppComponent', () => {
   })
   it('should pass all validations and inform if user looses - dozen', () => {
     app.apuesta = apostarAl(DOCENA, 'Segunda', 100)
-    app.apuesta.obtenerNumeroGanador = () => 1
+    spyOn(app.apuesta, "obtenerNumeroGanador").and.returnValue(1)
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
 
