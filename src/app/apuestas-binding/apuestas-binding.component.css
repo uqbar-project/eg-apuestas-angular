@@ -12,6 +12,12 @@ form {
   padding: 0 5rem;
 }
 
+@media (max-width: 500px) {
+  form {
+    padding: 0 0.5rem;
+  }
+}
+
 .row {
   margin: 0.5em 0;
 }

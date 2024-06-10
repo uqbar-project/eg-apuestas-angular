@@ -1,1 +1,66 @@
-<p>apuestas-reactive works!</p>
+<form clrForm [formGroup]="apuestaForm" class="form-control">
+    <div class="title">
+      <p class="h3 text-center">Apuestas de Ruleta</p>
+    </div>
+    <div class="row">
+      <label for="fecha" class="form-label">Fecha</label>
+      <input type="date" data-testid="fechaApuesta" id="fecha" name="fecha" formControlName="fecha" placeholder="Fecha de apuesta">
+      @if (errorMessage('fecha', 'required')) {
+        <div class="validation-row">
+          <div [attr.data-testid]="'errorMessage-fecha'" class="validation">
+            {{errorMessage('fecha', 'required')}}
+          </div>
+        </div>
+      }
+      @if (errorMessage('fecha', 'dateShouldBeGreaterThanToday')) {
+        <div class="validation-row">
+          <div [attr.data-testid]="'errorMessage-fecha'" class="validation">
+            {{errorMessage('fecha', 'dateShouldBeGreaterThanToday')}}
+          </div>
+        </div>
+      }
+    </div>
+    <div class="row">
+      <label for="monto">Monto</label>
+      <input clrInput type="number" data-testid="monto" name="monto" class="numeric" formControlName="monto"
+        placeholder="Monto en $" required="true">
+
+      @if (errorMessage('monto', 'min')) {
+        <div class="validation-row">
+          <div [attr.data-testid]="'errorMessage-monto'" class="validation">
+            {{errorMessage('monto', 'min')}}
+          </div>
+        </div>
+      }
+      </div>
+    <div class="row">
+      <label for="tipoApuesta">Tipo de Apuesta</label>
+      <p class="tipoApuesta">Pleno</p>
+    </div>
+    <div class="row">
+      <label for="apuesta">Qué apostás</label>
+      <select name="apuesta" data-testid="apuesta" class="form-control" formControlName="valorApostado"
+        [disabled]="!apuesta.tipoApuesta?.valoresAApostar" required="true">
+        @for (valor of apuesta.tipoApuesta?.valoresAApostar; track valor) {
+            <option [ngValue]="valor">{{valor}}</option>
+        }
+      </select>
+      @if (errorMessage('valorApostado', 'required')) {
+        <div class="validation-row">
+          <div [attr.data-testid]="'errorMessage-valorApostado'" class="validation">
+            {{errorMessage('valorApostado', 'required')}}
+          </div>
+        </div>
+      }
+    </div>
+    <div class="botonera">
+      <button class="btn-primary" data-testid="btnApuesta" (click)="apostar()" type="submit">Apostar</button>
+    </div>
+    <div class="row">
+        @if (resultado()) {
+            <div class="message" data-testid="resultado">
+              {{resultado()}}
+            </div>
+        }
+    </div>
+  </form>

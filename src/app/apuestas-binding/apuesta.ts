@@ -1,13 +1,15 @@
 import { Resultado } from './resultado'
 
+export const MONTO_MINIMO_PLENO = 10
+
 class Pleno {
   ganancia = 35
   descripcion = 'Pleno'
   valoresAApostar = Array.from(new Array(36), (value, index) => index + 1)
 
   validar(apuesta: Apuesta) {
-    if (apuesta.monto <= 10) {
-      apuesta.addError('monto', 'Debe apostar más de 10 $')
+    if (apuesta.monto <= MONTO_MINIMO_PLENO) {
+      apuesta.addError('monto', `Debe apostar más de ${MONTO_MINIMO_PLENO} $`)
     }
   }
 
@@ -74,7 +76,6 @@ export class Apuesta {
     this.errors.length = 0 // TODO: add a helper function
     const now = new Date()
     now.setHours(0, 0, 0, 0)
-    console.info(this.fecha)
     if (!this.fecha) {
       this.addError('fecha', 'Debe ingresar una fecha de apuesta')
     } else {

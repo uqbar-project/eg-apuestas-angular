@@ -1,23 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { ApuestasReactiveComponent } from './apuestas-reactive.component';
+import { ApuestasReactiveComponent } from './apuestas-reactive.component'
 
 describe('ApuestasReactiveComponent', () => {
-  let component: ApuestasReactiveComponent;
-  let fixture: ComponentFixture<ApuestasReactiveComponent>;
+  let component: ApuestasReactiveComponent
+  let fixture: ComponentFixture<ApuestasReactiveComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ApuestasReactiveComponent]
-    })
-    .compileComponents();
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(ApuestasReactiveComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(ApuestasReactiveComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

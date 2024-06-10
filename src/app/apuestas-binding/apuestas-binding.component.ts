@@ -13,20 +13,14 @@ import dayjs from 'dayjs'
 })
 export class ApuestasBindingComponent {
   apuesta = new Apuesta()
-  // opcionesFecha!: IDatePickerConfig
   fechaApuesta = ''
   tiposApuesta = [PLENO, DOCENA]
   cssClass = 'fecha'
 
   apostar() {
-    this.apuesta.fecha = dayjs(this.fechaApuesta).toDate()
+    // con el template no hay demasiada lógica en nuestro modelo de vista
+    this.apuesta.fecha = this.fechaApuesta === '' ? undefined : dayjs(this.fechaApuesta).toDate()
     this.apuesta.apostar()
   }
 
-  // ngOnInit() {
-  //   this.opcionesFecha = {
-  //     min: dayjs(new Date()),
-  //     format: 'DD/MM/YYYY',
-  //   }
-  // }
 }
