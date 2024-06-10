@@ -22,19 +22,6 @@ form {
   margin: 0.5em 0;
 }
 
-.title {
-  padding: 1.5rem 2rem;
-  margin-bottom: 1rem;
-  font-weight: bold;
-  background: rgb(2, 0, 36);
-  background: linear-gradient(
-    90deg,
-    rgba(2, 0, 36, 1) 0%,
-    rgba(124, 193, 222, 1) 0%,
-    rgba(233, 241, 242, 1) 100%
-  );
-}
-
 .message {
   padding: 1.5rem 1rem;
 }

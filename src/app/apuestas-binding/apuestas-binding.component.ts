@@ -3,17 +3,19 @@ import { Apuesta, DOCENA, PLENO } from './apuesta'
 import { ValidationFieldComponent } from './validationField/validationField.component'
 import { FormsModule } from '@angular/forms'
 import dayjs from 'dayjs'
+import { DatePipe } from '@angular/common'
 
 @Component({
   selector: 'app-apuestas-binding',
   standalone: true,
-  imports: [FormsModule, ValidationFieldComponent],
+  imports: [DatePipe, FormsModule, ValidationFieldComponent],
   templateUrl: './apuestas-binding.component.html',
   styleUrl: './apuestas-binding.component.css'
 })
 export class ApuestasBindingComponent {
   apuesta = new Apuesta()
   fechaApuesta = ''
+  fechaApuestaMinima = new Date()
   tiposApuesta = [PLENO, DOCENA]
   cssClass = 'fecha'
 

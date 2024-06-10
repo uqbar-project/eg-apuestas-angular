@@ -4,5 +4,5 @@ import { ApuestasReactiveComponent } from './apuestas-reactive/apuestas-reactive
 
 export const routes: Routes = [
   { path: 'reactive', component: ApuestasReactiveComponent },
-  { path: '**', component: ApuestasBindingComponent }
+  { path: 'binding', component: ApuestasBindingComponent }
 ]

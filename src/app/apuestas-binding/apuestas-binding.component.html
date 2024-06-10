@@ -1,10 +1,7 @@
 <form clrForm #apuestasForm="ngForm" class="form-control">
-    <div class="title">
-      <p class="h3 text-center">Apuestas de Ruleta</p>
-    </div>
     <div class="row">
       <label for="fecha" class="form-label">Fecha</label>
-      <input type="date" data-testid="fechaApuesta" [(ngModel)]="fechaApuesta" name="fechaApuesta" placeholder="Fecha de apuesta">
+      <input type="date" data-testid="fechaApuesta" [(ngModel)]="fechaApuesta" name="fechaApuesta" placeholder="Fecha de apuesta" min="{{fechaApuestaMinima  | date: 'yyyy-MM-dd'}}">
       <validation-field [apuesta]="apuesta" [field]="'fecha'"></validation-field>
     </div>
     <div class="row">

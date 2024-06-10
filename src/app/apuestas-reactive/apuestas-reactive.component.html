@@ -1,7 +1,4 @@
 <form clrForm [formGroup]="apuestaForm" class="form-control">
-    <div class="title">
-      <p class="h3 text-center">Apuestas de Ruleta</p>
-    </div>
     <div class="row">
       <label for="fecha" class="form-label">Fecha</label>
       <input type="date" data-testid="fechaApuesta" id="fecha" name="fecha" formControlName="fecha" placeholder="Fecha de apuesta">
@@ -39,8 +36,7 @@
     </div>
     <div class="row">
       <label for="apuesta">Qué apostás</label>
-      <select name="apuesta" data-testid="apuesta" class="form-control" formControlName="valorApostado"
-        [disabled]="!apuesta.tipoApuesta?.valoresAApostar" required="true">
+      <select name="apuesta" data-testid="apuesta" class="form-control" formControlName="valorApostado" required="true">
         @for (valor of apuesta.tipoApuesta?.valoresAApostar; track valor) {
             <option [ngValue]="valor">{{valor}}</option>
         }
