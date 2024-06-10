@@ -2,10 +2,16 @@
   font-size: 12px;
 }
 
+.container {
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .title {
-  padding: 0.5rem 1.5rem;
-  margin-bottom: 1rem;
+  padding: 1.5rem 1.5rem;
   font-weight: bold;
+  font-size: 2rem;
   background: rgb(2, 0, 36);
   background: linear-gradient(
     90deg,
@@ -13,8 +19,4 @@
     rgba(124, 193, 222, 1) 0%,
     rgba(233, 241, 242, 1) 100%
   );
-}
-
-.title p {
-  font-size: 2rem;
 }
