@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { Apuesta, DOCENA, PLENO } from './apuesta'
+import { Apuesta, DOCENA, PLENO } from '../domain/apuesta'
 import { ValidationFieldComponent } from './validationField/validationField.component'
 import { FormsModule } from '@angular/forms'
 import dayjs from 'dayjs'

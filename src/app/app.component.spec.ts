@@ -1,29 +1,28 @@
-import { TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { AppComponent } from './app.component'
+import { ApuestasBindingComponent } from './apuestas-binding/apuestas-binding.component'
+import { ApuestasReactiveComponent } from './apuestas-reactive/apuestas-reactive.component'
+import { RouterModule } from '@angular/router'
 
 describe('AppComponent', () => {
+  let component: AppComponent
+  let fixture: ComponentFixture<AppComponent>
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
-    }).compileComponents();
-  });
+      imports: [AppComponent, ApuestasBindingComponent, ApuestasReactiveComponent, RouterModule.forRoot([])],
+    }).compileComponents()
+    fixture = TestBed.createComponent(AppComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
+    expect(component).toBeTruthy()
+  })
 
-  it(`should have the 'eg-apuestas-angular' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('eg-apuestas-angular');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, eg-apuestas-angular');
-  });
-});
+  it('should render two options', () => {
+    const compiled = fixture.nativeElement as HTMLElement
+    expect(compiled.querySelectorAll('li').length).toBe(2)
+  })
+})

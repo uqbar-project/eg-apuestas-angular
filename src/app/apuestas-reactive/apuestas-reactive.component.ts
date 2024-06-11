@@ -1,8 +1,8 @@
 import { Component } from '@angular/core'
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms'
 import { ReactiveFormsModule } from '@angular/forms'
-import { Apuesta, MONTO_MINIMO_PLENO } from '../apuestas-binding/apuesta'
 import dayjs from 'dayjs'
+import { Apuesta, MONTO_MINIMO_PLENO } from '../domain/apuesta'
 
 @Component({
   selector: 'app-apuestas-reactive',
@@ -17,7 +17,6 @@ export class ApuestasReactiveComponent {
   // - valores como el resultado
   apuestaForm = this.formBuilder.group({
     fecha: ['', [
-        Validators.required,
         DateValidator.greaterThanToday
       ]
     ],
@@ -70,7 +69,7 @@ export class DateValidator {
   // Number only validation
   static greaterThanToday(control: AbstractControl) {
     const value = control.value
-    if (value === null || value === '') return null
+    if (value === null || value === '') return { dateShouldBeGreaterThanToday: { message: 'Debe ingresar fecha' } }
 
     const date = dayjs(value).toDate()
     return date < new Date() ? { dateShouldBeGreaterThanToday: { message: 'Debe ingresar fecha de hoy o futura' } } : null

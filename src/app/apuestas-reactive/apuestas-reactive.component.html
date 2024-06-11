@@ -2,13 +2,6 @@
     <div class="row">
       <label for="fecha" class="form-label">Fecha</label>
       <input type="date" data-testid="fechaApuesta" id="fecha" name="fecha" formControlName="fecha" placeholder="Fecha de apuesta">
-      @if (errorMessage('fecha', 'required')) {
-        <div class="validation-row">
-          <div [attr.data-testid]="'errorMessage-fecha'" class="validation">
-            {{errorMessage('fecha', 'required')}}
-          </div>
-        </div>
-      }
       @if (errorMessage('fecha', 'dateShouldBeGreaterThanToday')) {
         <div class="validation-row">
           <div [attr.data-testid]="'errorMessage-fecha'" class="validation">

@@ -1,4 +1,4 @@
-import { Resultado } from './resultado'
+import { Resultado } from "./resultado"
 
 export const MONTO_MINIMO_PLENO = 10
 
