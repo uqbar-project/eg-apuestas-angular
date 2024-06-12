@@ -101,6 +101,7 @@ export class Apuesta {
     this.validarApuesta()
     if (this.errors.length > 0) return
     const numeroGanador = this.obtenerNumeroGanador()
+    console.info('salió el ', numeroGanador, this.valorApostado)
     const ganancia = this.calcularGanancia(numeroGanador)
     this.resultado = new Resultado(numeroGanador, ganancia)
   }

@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { ApuestasBindingComponent } from './apuestas-binding.component'
-import { getByTestId, mensajeDeError, resultado } from '../../utils/test-utils'
 import { Apuesta, DOCENA, PLENO, TipoApuesta } from '../domain/apuesta'
 import dayjs from 'dayjs'
 
@@ -100,4 +99,17 @@ function apostarAl(tipoApuesta: TipoApuesta, numero: number | string, monto = 20
 
 const apostarHoy = (component: ApuestasBindingComponent) => {
   component.fechaApuesta = dayjs(new Date()).format('DD/MM/YYYY')
+}
+
+export const getByTestId = (appComponent: ComponentFixture<unknown>, testId: string) => {
+  const compiled = appComponent.debugElement.nativeElement
+  return compiled.querySelector(`[data-testid="${testId}"]`)
+}
+
+export const mensajeDeError = (fixture: ComponentFixture<unknown>, field: string) => {
+  return getByTestId(fixture, `errorMessage-${field}`).textContent
+}
+
+export const resultado = (fixture: ComponentFixture<unknown>) => {
+  return getByTestId(fixture, 'resultado').textContent
 }

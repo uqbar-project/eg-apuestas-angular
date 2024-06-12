@@ -25,7 +25,7 @@ export class ApuestasReactiveComponent {
         Validators.min(MONTO_MINIMO_PLENO),
       ]
     ],
-    valorApostado: ['',
+    valorApostado: [1,
       [
         Validators.required,
       ]
@@ -55,6 +55,7 @@ export class ApuestasReactiveComponent {
       { fecha: fecha ? dayjs(fecha).toDate() : undefined },
     )
     this.apuesta.apostar()
+    console.info(this.apuesta.resultado?.valor())
 
     // sin el binding necesitamos hacer las transformaciones a mano
     this.apuestaForm.get('resultado')!.setValue(this.apuesta.resultado?.valor() ?? null)
