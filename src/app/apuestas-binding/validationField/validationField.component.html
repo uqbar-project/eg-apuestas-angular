@@ -1,0 +1,7 @@
+@if (apuesta.hasErrors(field)) {
+  <div class="validation-row">
+    <div [attr.data-testid]="'errorMessage-' + field" class="validation">
+      {{apuesta.errorsFrom(field)}}
+    </div>
+  </div>
+}

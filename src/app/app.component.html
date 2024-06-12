@@ -1,42 +1,18 @@
-<form clrForm #apuestasForm="ngForm" class="form-control">
+
+<div class="container">
   <div class="title">
-    <p class="h3 text-center">Apuestas de Ruleta</p>
+    Apuestas
   </div>
-  <div class="row">
-    <label for="fecha" class="form-label">Fecha</label>
-    <!-- https://github.com/vlio20/angular-datepicker/blob/master/README.md -->
-    <dp-date-picker [config]="opcionesFecha" (onSelect)="dateSelected($event)" [ngClass]="cssClass"
-    name="fechaApuesta" data-testid="fechaApuesta" placeholder="Fecha de apuesta"></dp-date-picker>
-    <validation-field [apuesta]="apuesta" [field]="'fecha'"></validation-field>
-  </div>
-  <div class="row">
-    <label for="monto">Monto</label>
-    <input clrInput type="number" data-testid="monto" name="monto" class="numeric" [(ngModel)]="apuesta.monto"
-      placeholder="Monto en $" required="true">
-    <validation-field [apuesta]="apuesta" [field]="'monto'"></validation-field>
-  </div>
-  <div class="row">
-    <label for="tipoApuesta">Tipo de Apuesta</label>
-    <select data-testid="tipoApuesta" name="tipoApuesta" class="form-control" [(ngModel)]="apuesta.tipoApuesta"
-      required="true" (ngModelChange)="apuesta.valorApostado = ''">
-      <option *ngFor="let tipo of tiposApuesta" [ngValue]="tipo">{{tipo.descripcion}}</option>
-    </select>
-    <validation-field [apuesta]="apuesta" [field]="'tipoApuesta'"></validation-field>
-  </div>
-  <div class="row">
-    <label for="apuesta">Qué apostás</label>
-    <select name="apuesta" data-testid="apuesta" class="form-control" [(ngModel)]="apuesta.valorApostado"
-      [disabled]="!apuesta.tipoApuesta?.valoresAApostar" required="true">
-      <option *ngFor="let valor of apuesta.tipoApuesta?.valoresAApostar" [ngValue]="valor">{{valor}}</option>
-    </select>
-    <validation-field [apuesta]="apuesta" [field]="'valorAApostar'"></validation-field>
-  </div>
-  <div class="botonera">
-    <button class="btn-primary" data-testid="btnApuesta" (click)="apostar()" type="submit">Apostar</button>
-  </div>
-  <div class="row">
-    <div class="message" data-testid="resultado" *ngIf="apuesta.resultado">
-      {{apuesta.resultado.valor()}}
-    </div>
-  </div>
-</form>
+</div>
+<nav>
+  <ul>
+    <li>
+      <a routerLink="/binding" routerLinkActive="active" ariaCurrentWhenActive="page">Versión Template (Binding)</a>
+    </li>
+    <li>
+      <a routerLink="/reactive" routerLinkActive="active" ariaCurrentWhenActive="page">Versión Reactiva</a>
+    </li>
+  </ul>
+</nav>
+<hr/>
+<router-outlet />

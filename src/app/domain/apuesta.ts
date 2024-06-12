@@ -1,4 +1,6 @@
-import { Resultado } from './resultado'
+import { Resultado } from "./resultado"
+
+export const MONTO_MINIMO_PLENO = 10
 
 class Pleno {
   ganancia = 35
@@ -6,8 +8,8 @@ class Pleno {
   valoresAApostar = Array.from(new Array(36), (value, index) => index + 1)
 
   validar(apuesta: Apuesta) {
-    if (apuesta.monto <= 10) {
-      apuesta.addError('monto', 'Debe apostar más de 10 $')
+    if (apuesta.monto <= MONTO_MINIMO_PLENO) {
+      apuesta.addError('monto', `Debe apostar más de ${MONTO_MINIMO_PLENO} $`)
     }
   }
 
@@ -99,6 +101,7 @@ export class Apuesta {
     this.validarApuesta()
     if (this.errors.length > 0) return
     const numeroGanador = this.obtenerNumeroGanador()
+    console.info('salió el ', numeroGanador, this.valorApostado)
     const ganancia = this.calcularGanancia(numeroGanador)
     this.resultado = new Resultado(numeroGanador, ganancia)
   }

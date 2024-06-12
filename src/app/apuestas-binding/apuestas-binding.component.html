@@ -1,0 +1,43 @@
+<form clrForm #apuestasForm="ngForm" class="form-control">
+    <div class="row">
+      <label for="fecha" class="form-label">Fecha</label>
+      <input type="date" data-testid="fechaApuesta" [(ngModel)]="fechaApuesta" name="fechaApuesta" placeholder="Fecha de apuesta" min="{{fechaApuestaMinima  | date: 'yyyy-MM-dd'}}">
+      <validation-field [apuesta]="apuesta" [field]="'fecha'"></validation-field>
+    </div>
+    <div class="row">
+      <label for="monto">Monto</label>
+      <input clrInput type="number" data-testid="monto" name="monto" class="numeric" [(ngModel)]="apuesta.monto"
+        placeholder="Monto en $" required="true">
+      <validation-field [apuesta]="apuesta" [field]="'monto'"></validation-field>
+    </div>
+    <div class="row">
+      <label for="tipoApuesta">Tipo de Apuesta</label>
+      <select data-testid="tipoApuesta" name="tipoApuesta" class="form-control" [(ngModel)]="apuesta.tipoApuesta"
+        required="true" (ngModelChange)="apuesta.valorApostado = ''">
+        @for (tipo of tiposApuesta; track tipo) {
+            <option [ngValue]="tipo">{{tipo.descripcion}}</option>
+        }
+      </select>
+      <validation-field [apuesta]="apuesta" [field]="'tipoApuesta'"></validation-field>
+    </div>
+    <div class="row">
+      <label for="apuesta">Qué apostás</label>
+      <select name="apuesta" data-testid="apuesta" class="form-control" [(ngModel)]="apuesta.valorApostado"
+        [disabled]="!apuesta.tipoApuesta?.valoresAApostar" required="true">
+        @for (valor of apuesta.tipoApuesta?.valoresAApostar; track valor) {
+            <option [ngValue]="valor">{{valor}}</option>
+        }
+      </select>
+      <validation-field [apuesta]="apuesta" [field]="'valorAApostar'"></validation-field>
+    </div>
+    <div class="botonera">
+      <button class="btn-primary" data-testid="btnApuesta" (click)="apostar()" type="submit">Apostar</button>
+    </div>
+    <div class="row">
+        @if (apuesta.resultado) {
+            <div class="message" data-testid="resultado">
+              {{apuesta.resultado.valor()}}
+            </div>
+        }
+    </div>
+  </form>

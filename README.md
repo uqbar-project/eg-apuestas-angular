@@ -1,6 +1,6 @@
-# Apuestas de una ruleta
+# Apuestas de una ruleta: Forms con template y reactivos
 
-[![Build](https://github.com/uqbar-project/eg-apuestas-angular/actions/workflows/build.yml/badge.svg)](https://github.com/uqbar-project/eg-apuestas-angular/actions/workflows/build.yml) ![Coverage](./badges/eg-apuestas-angular/coverage.svg?time=1)
+[![Build](https://github.com/uqbar-project/eg-apuestas-angular/actions/workflows/build.yml/badge.svg)](https://github.com/uqbar-project/eg-apuestas-angular/actions/workflows/build.yml) [![codecov](https://codecov.io/gh/uqbar-project/eg-apuestas-angular/graph/badge.svg?token=1ReSqAZHOF)](https://codecov.io/gh/uqbar-project/eg-apuestas-angular)
 
 
 Esta aplicación permite mostrar cómo funciona el binding bidireccional.
@@ -10,6 +10,12 @@ Esta aplicación permite mostrar cómo funciona el binding bidireccional.
 # Creación de la aplicación
 
 Creamos la aplicación con Angular CLI y agregamos la dependencia del DatePicker para contar con un control calendario (pueden ver [la documentación oficial aquí](https://github.com/vlio20/angular-datepicker)).
+
+# TODO
+
+- Eliminar explicación date picker y reemplazarla por el input
+- Agregar explicación reactive forms
+- Contar las rutas que se generaron en el app component y los dos componentes principales
 
 # Arquitectura general
 
