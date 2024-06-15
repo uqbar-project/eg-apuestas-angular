@@ -5,8 +5,6 @@
 
 Esta aplicación permite mostrar cómo funciona el binding bidireccional en un formulario y su alternativa, con **formularios reactivos**.
 
-<img src="images/demo5.gif" height="70%" width="70%">
-
 ## Explicación
 
 - [Formularios con templating](./docs/templating.md)

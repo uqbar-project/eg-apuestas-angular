@@ -1,9 +1,11 @@
 
 # Formulario - opción templating
 
+<img src="../images/demo-2024-binding.gif" height="70%" width="70%">
+
 ## Arquitectura general
 
-![images](images/Arquitectura.png)
+![images](../images/Arquitectura.png)
 
 Se desarrolló la página principal en el componente _apuestas-binding.component.ts_.
 

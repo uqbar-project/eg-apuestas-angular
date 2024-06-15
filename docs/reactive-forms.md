@@ -25,6 +25,8 @@ Recomendamos
 
 ## Ahora sí, formularios reactivos
 
+<img src="../images/demo-2024-reactive.gif" height="70%" width="70%">
+
 Angular 2 nació también con la idea de tener una alternativa a los formularios con templating (o binding) que son los **reactive forms**.
 
 Los elementos principales de un formulario reactivo son:
