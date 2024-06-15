@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { Apuesta, DOCENA, PLENO } from './apuesta'
 
 describe('Apuesta', () => {
@@ -14,6 +15,12 @@ describe('Apuesta', () => {
     const apuestaSinFecha = new Apuesta()
     apuestaSinFecha.validarApuesta()
     expect(apuestaSinFecha.errorsFrom('fecha')).toBe('Debe ingresar una fecha de apuesta')
+  })
+  it('apuesta con fecha anterior a la del día de hoy tira error', () => {
+    const apuestaFechaAnterior = new Apuesta()
+    apuestaFechaAnterior.fecha = dayjs().subtract(1, 'day').toDate()
+    apuestaFechaAnterior.validarApuesta()
+    expect(apuestaFechaAnterior.errorsFrom('fecha')).toBe('Debe ingresar una fecha actual o posterior al día de hoy')
   })
   it('apuesta con monto negativo tira error', () => {
     const apuestaMontoNegativo = new Apuesta()

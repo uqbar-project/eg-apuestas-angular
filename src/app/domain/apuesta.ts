@@ -78,7 +78,7 @@ export class Apuesta {
     now.setHours(0, 0, 0, 0)
     if (!this.fecha) {
       this.addError('fecha', 'Debe ingresar una fecha de apuesta')
-    } else {
+      } else {
       if (now.getTime() > this.fecha.getTime()) {
         this.addError('fecha', 'Debe ingresar una fecha actual o posterior al día de hoy')
       }
