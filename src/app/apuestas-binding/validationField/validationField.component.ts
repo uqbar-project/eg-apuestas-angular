@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-import { Apuesta } from '../../domain/apuesta'
+import { Apuesta } from 'app/domain/apuesta'
 
 @Component({
   selector: 'validation-field',

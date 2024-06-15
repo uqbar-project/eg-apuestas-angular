@@ -1,9 +1,9 @@
 import { Component } from '@angular/core'
-import { Apuesta, DOCENA, PLENO } from '../domain/apuesta'
 import { ValidationFieldComponent } from './validationField/validationField.component'
 import { FormsModule } from '@angular/forms'
 import dayjs from 'dayjs'
 import { DatePipe } from '@angular/common'
+import { Apuesta, DOCENA, PLENO } from 'app/domain/apuesta'
 
 @Component({
   selector: 'app-apuestas-binding',

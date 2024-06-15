@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { ApuestasBindingComponent } from './apuestas-binding.component'
-import { Apuesta, DOCENA, PLENO, TipoApuesta } from '../domain/apuesta'
 import dayjs from 'dayjs'
+import { Apuesta, DOCENA, PLENO, TipoApuesta } from 'app/domain/apuesta'
 
 describe('ApuestasBindingComponent', () => {
   let component: ApuestasBindingComponent

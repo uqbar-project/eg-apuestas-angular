@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms'
 import { ReactiveFormsModule } from '@angular/forms'
 import dayjs from 'dayjs'
-import { Apuesta, MONTO_MINIMO_PLENO } from '../domain/apuesta'
+import { Apuesta, MONTO_MINIMO_PLENO } from 'app/domain/apuesta'
 
 @Component({
   selector: 'app-apuestas-reactive',

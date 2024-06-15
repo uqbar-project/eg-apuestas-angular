@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import dayjs from 'dayjs'
-import { Apuesta } from '../domain/apuesta'
+import { Apuesta } from 'app/domain/apuesta'
 import { ApuestasReactiveComponent } from './apuestas-reactive.component'
 
 describe('ApuestasReactiveComponent', () => {
