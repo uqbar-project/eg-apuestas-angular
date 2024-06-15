@@ -108,7 +108,6 @@ Para determinar si la fecha de apuesta es válida, definimos un validador propio
 
 ```ts
 export class DateValidator {
-  // Number only validation
   static greaterThanToday(control: AbstractControl) {
     const value = control.value
     if (value === null || value === '') return { dateShouldBeGreaterThanToday: { message: 'Debe ingresar fecha' } }
