@@ -96,27 +96,6 @@ describe('ValidationErrorMessageComponent', () => {
 
 })
 
-// describe('para un campo requerido', () >= {
-//
-//
-//   it('para un campo requerido debería mostrar un error de requerido', () => {
-//   component.control.addValidators(Validators.required)
-//   fixture.detectChanges()
-//   expect(mensajeDeError(fixture, component.fieldName)).toBeFalsy()
-// })
-//
-// it('para un campo requerido debería mostrar un error de requerido', () => {
-//   component.control.addValidators(Validators.required)
-//   fixture.detectChanges()
-//   expect(mensajeDeError(fixture, component.fieldName)).toBeFalsy()
-// })
-// })
-
-const getByTestId = (appComponent: ComponentFixture<unknown>, testId: string) => {
-  const compiled = appComponent.debugElement.nativeElement
-  return compiled.querySelector(`[data-testid="${testId}"]`)
-}
-
 const getMensajesDeErrorPara = (fixture: ComponentFixture<unknown>, field: string) => {
   return fixture.debugElement.query(By.css(`[data-testid="errors-${field}"]`))
 }
