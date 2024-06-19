@@ -22,7 +22,6 @@ export class ValidationErrorMessageComponent {
   protected getListaErrores() {
     const errors = this.control.errors
     if (errors == null) return []
-    console.info(Object.keys(errors))
     return Object.keys(errors)
   }
 
