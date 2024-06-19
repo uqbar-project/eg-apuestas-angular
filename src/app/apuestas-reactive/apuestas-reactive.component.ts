@@ -51,10 +51,7 @@ export class ApuestasReactiveComponent {
     this.apuesta.apostar()
 
     const erroresApuesta = this.apuesta.errors
-    if (erroresApuesta.length) {
-      console.error(...erroresApuesta.map(value => `[${value.field}] ${value.message}`))
-      return
-    }
+    if (erroresApuesta.length) return
 
     // sin el binding necesitamos hacer las transformaciones a mano
     this.apuestaForm.get('resultado')!.setValue(this.apuesta.resultado?.valor() ?? null)
