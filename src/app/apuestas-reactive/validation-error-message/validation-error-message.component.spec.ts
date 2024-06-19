@@ -127,7 +127,3 @@ const cantidadDeErrores = (errores: DebugElement) => {
 const getMensajeDeErrorDeTipo = (debugElement: DebugElement, validator: string) => {
   return debugElement.query(By.css(`[data-testid="errorMessage-${validator}"]`))
 }
-
-const resultado = (fixture: ComponentFixture<unknown>) => {
-  return getByTestId(fixture, 'resultado').textContent
-}
