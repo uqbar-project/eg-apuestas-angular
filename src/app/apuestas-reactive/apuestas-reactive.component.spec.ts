@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import dayjs from 'dayjs'
-import { Apuesta } from 'app/domain/apuesta'
+import { Apuesta, ValidationMessage } from 'app/domain/apuesta'
 import { ApuestasReactiveComponent } from './apuestas-reactive.component'
 
 describe('ApuestasReactiveComponent', () => {
@@ -61,6 +61,16 @@ describe('ApuestasReactiveComponent', () => {
     hacerPerderSpy.calls.reset()
 
     expect(resultado(fixture)).toContain('¡¡Perdiste!! Salió el 24')
+  })
+  it('should pass all validations but fail internally, no message shown', () => {
+    apostarMontoHoyAl(component, 25, 20)
+    const listarErroresInternos = spyOn(component.apuesta, 'getAllErrors').and.returnValue([new ValidationMessage("monto", "test")])
+    getByTestId(fixture, 'btnApuesta').click()
+    fixture.detectChanges()
+    listarErroresInternos.calls.reset()
+
+    expect(getByTestId(fixture, 'resultado')).toBeFalsy()
+    expect(component.apuesta.getAllErrors().length).toBeTruthy()
   })
 
 })

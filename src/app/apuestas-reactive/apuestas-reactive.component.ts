@@ -50,7 +50,7 @@ export class ApuestasReactiveComponent {
     )
     this.apuesta.apostar()
 
-    const erroresApuesta = this.apuesta.errors
+    const erroresApuesta = this.apuesta.getAllErrors()
     if (erroresApuesta.length) return
 
     // sin el binding necesitamos hacer las transformaciones a mano

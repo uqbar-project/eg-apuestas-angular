@@ -59,6 +59,8 @@ export class Apuesta {
   resultado: Resultado | null = null
   errors: ValidationMessage[] = []
 
+  getAllErrors() { return this.errors}
+
   hasErrors(field: string): boolean {
     return this.errors.some((_) => _.field == field)
   }
