@@ -59,6 +59,8 @@ export class Apuesta {
   resultado: Resultado | null = null
   errors: ValidationMessage[] = []
 
+  getAllErrors() { return this.errors}
+
   hasErrors(field: string): boolean {
     return this.errors.some((_) => _.field == field)
   }
@@ -99,6 +101,7 @@ export class Apuesta {
   apostar() {
     this.resultado = null
     this.validarApuesta()
+    console.table(this.errors)
     if (this.errors.length > 0) return
     const numeroGanador = this.obtenerNumeroGanador()
     console.info('salió el ', numeroGanador, this.valorApostado)

@@ -1,13 +1,14 @@
 import { Component } from '@angular/core'
-import { AbstractControl, FormBuilder, Validators } from '@angular/forms'
+import { AbstractControl, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ReactiveFormsModule } from '@angular/forms'
 import dayjs from 'dayjs'
 import { Apuesta, MONTO_MINIMO_PLENO } from 'app/domain/apuesta'
+import { ValidationErrorMessageComponent } from './validation-error-message/validation-error-message.component'
 
 @Component({
   selector: 'app-apuestas-reactive',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ValidationErrorMessageComponent],
   templateUrl: './apuestas-reactive.component.html',
   styleUrl: './apuestas-reactive.component.css'
 })
@@ -16,20 +17,9 @@ export class ApuestasReactiveComponent {
   // - campos (fields) que ingresa el usuario, pero también
   // - valores como el resultado
   apuestaForm = this.formBuilder.group({
-    fecha: ['', [
-        DateValidator.greaterThanToday
-      ]
-    ],
-    monto: ['', [
-        Validators.required,
-        Validators.min(MONTO_MINIMO_PLENO),
-      ]
-    ],
-    valorApostado: [1,
-      [
-        Validators.required,
-      ]
-    ],
+    fecha: ['', [Validators.required, DateValidator.equalOrGreaterThanToday]],
+    monto: ['', [Validators.required, Validators.min(MONTO_MINIMO_PLENO + 1)]],
+    valorApostado: [1, [Validators.required]],
     resultado: ['']
   })
 
@@ -37,27 +27,36 @@ export class ApuestasReactiveComponent {
 
   apuesta = new Apuesta()
 
-  errorMessage(field: string, validator: string) {
-    const error = this.apuestaForm.get(field)?.errors
-    if (validator === 'required' && error) return `Debe ingresar ${field}`
-    if (validator === 'min' && error) return `Debe ingresar un valor mayor para ${field}`
-    return error?.[validator]?.message ?? undefined
+  getFormControl(field: string) {
+    const control = this.apuestaForm.get(field)
+    return <FormControl>control
   }
 
   apostar() {
     // otra alternativa: https://docs.rxweb.io/getting-started
 
+    // antes que nada, validamos posibles erroresApuesta, y de existir los hacemos visibles "tocándolos".
+    if (this.apuestaForm.invalid) {
+      this.apuestaForm.markAllAsTouched()
+      return
+    }
+
     // reutilizamos el objeto apuesta
-    const fecha = this.apuestaForm.get('fecha')?.value
+    const campoFecha = this.apuestaForm.get('fecha')?.value
     this.apuesta = Object.assign(
       this.apuesta,
       { ...this.apuestaForm.value },
-      { fecha: fecha ? dayjs(fecha).toDate() : undefined },
+      { fecha: campoFecha ? dayjs(campoFecha).toDate() : undefined }
     )
     this.apuesta.apostar()
 
+    const erroresApuesta = this.apuesta.getAllErrors()
+    if (erroresApuesta.length) return
+
     // sin el binding necesitamos hacer las transformaciones a mano
-    this.apuestaForm.get('resultado')!.setValue(this.apuesta.resultado?.valor() ?? null)
+    this.apuestaForm
+      .get('resultado')!
+      .setValue(this.apuesta.resultado?.valor() ?? null)
   }
 
   resultado() {
@@ -66,11 +65,18 @@ export class ApuestasReactiveComponent {
 }
 
 export class DateValidator {
-  static greaterThanToday(control: AbstractControl) {
+  static equalOrGreaterThanToday(control: AbstractControl) {
     const value = control.value
-    if (value === null || value === '') return { dateShouldBeGreaterThanToday: { message: 'Debe ingresar fecha' } }
+    if (value === null || value === '') return null
 
-    const date = dayjs(value).toDate()
-    return date < new Date() ? { dateShouldBeGreaterThanToday: { message: 'Debe ingresar fecha de hoy o futura' } } : null
+    const pickedDate = dayjs(value).toDate()
+    const now = new Date()
+    pickedDate.setHours(0,0,0,0)
+    now.setHours(0,0,0,0)
+
+    if (pickedDate < now)
+      return { dateShouldBeEqualOrGreaterThanToday: { message: 'Debe ingresar fecha de hoy o futura' } }
+
+    return null
   }
 }

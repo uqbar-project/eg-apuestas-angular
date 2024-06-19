@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import dayjs from 'dayjs'
-import { Apuesta } from 'app/domain/apuesta'
+import { Apuesta, ValidationMessage } from 'app/domain/apuesta'
 import { ApuestasReactiveComponent } from './apuestas-reactive.component'
 
 describe('ApuestasReactiveComponent', () => {
@@ -35,20 +35,13 @@ describe('ApuestasReactiveComponent', () => {
   })
   it('should fail if negative amount is entered', () => {
     apostarHoy(component)
-    component.apuesta = Object.assign(
-      new Apuesta(),
-      {
-        fecha: new Date(),
-        monto: -10,
-      }
-    )
+    apostarMonto(component, -10)
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
     expect(mensajeDeError(fixture, 'monto')).toContain('Debe ingresar un valor mayor para monto')
   })
   it('should pass all validations and inform if user wins - single', () => {
-    apostarHoy(component)
-    apostarAl(component, 25)
+    apostarMontoHoyAl(component, 25, 20)
 
     const hacerGanarSpy = spyOn(component.apuesta, 'obtenerNumeroGanador').and.returnValue(25)
     // se podría hacer a mano pero hay que deshacer esto al final del test
@@ -61,8 +54,7 @@ describe('ApuestasReactiveComponent', () => {
     expect(resultado(fixture)).toContain('Ganaste $700')
   })
   it('should pass all validations and inform if user loses - single', () => {
-    apostarHoy(component)
-    apostarAl(component, 25)
+    apostarMontoHoyAl(component, 25, 20)
     const hacerPerderSpy = spyOn(component.apuesta, 'obtenerNumeroGanador').and.returnValue(24)
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
@@ -70,12 +62,23 @@ describe('ApuestasReactiveComponent', () => {
 
     expect(resultado(fixture)).toContain('¡¡Perdiste!! Salió el 24')
   })
+  it('should pass all validations but fail internally, no message shown', () => {
+    apostarMontoHoyAl(component, 25, 20)
+    const listarErroresInternos = spyOn(component.apuesta, 'getAllErrors').and.returnValue([new ValidationMessage("monto", "test")])
+    getByTestId(fixture, 'btnApuesta').click()
+    fixture.detectChanges()
+    listarErroresInternos.calls.reset()
+
+    expect(getByTestId(fixture, 'resultado')).toBeFalsy()
+    expect(component.apuesta.getAllErrors().length).toBeTruthy()
+  })
 
 })
 
-const apostarAl = (component: ApuestasReactiveComponent, numero: number, monto = 20) => {
-  component.apuestaForm.get('monto')?.setValue(monto.toString())
-  component.apuestaForm.get('valorApostado')?.setValue(numero)
+const apostarMontoHoyAl = (component: ApuestasReactiveComponent, numero: number, monto = 20) => {
+  apostarHoy(component)
+  apostarMonto(component, monto)
+  apostarAl(component, numero)
 }
 
 const apostarHoy = (component: ApuestasReactiveComponent) => {
@@ -86,13 +89,21 @@ const apostarElDia = (component: ApuestasReactiveComponent, fecha: string) => {
   component.apuestaForm.get('fecha')?.setValue(fecha)
 }
 
+const apostarMonto = (component: ApuestasReactiveComponent, monto: number) => {
+  component.apuestaForm.get('monto')?.setValue(monto.toString())
+}
+
+const apostarAl = (component: ApuestasReactiveComponent, numero: number) => {
+  component.apuestaForm.get('valorApostado')?.setValue(numero)
+}
+
 export const getByTestId = (appComponent: ComponentFixture<ApuestasReactiveComponent>, testId: string) => {
   const compiled = appComponent.debugElement.nativeElement
   return compiled.querySelector(`[data-testid="${testId}"]`)
 }
 
 export const mensajeDeError = (fixture: ComponentFixture<ApuestasReactiveComponent>, field: string) => {
-  return getByTestId(fixture, `errorMessage-${field}`).textContent
+  return getByTestId(fixture, `errors-${field}`).textContent
 }
 
 export const resultado = (fixture: ComponentFixture<ApuestasReactiveComponent>) => {

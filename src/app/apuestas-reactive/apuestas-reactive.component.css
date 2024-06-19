@@ -77,24 +77,17 @@ input {
   height: 4em;
 }
 
+.btn-primary:hover {
+  box-shadow: inset 0 0 0 10em rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
 .message {
   background-color: lightgreen;
   border: solid 1px green;
   font-size: 0.9rem;
 }
 
-.validation-row {
-  background-color: lightsalmon;
-  border: 1px solid darkred;
-  color: darkred;
-  font-size: 0.7em;
-  height: 1.7em;
-  display: flex;
-  flex-direction: row;
-  padding: 0.5em;
-  margin: 0.5em 0;
-  align-items: center;
-}
 
 .tipoApuesta {
   font-size: 1.2rem;
