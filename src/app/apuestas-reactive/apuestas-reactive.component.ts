@@ -46,7 +46,7 @@ export class ApuestasReactiveComponent {
     this.apuesta = Object.assign(
       this.apuesta,
       { ...this.apuestaForm.value },
-      { fecha: campoFecha ?  dayjs(campoFecha).toDate() : undefined },
+      { fecha: campoFecha ? dayjs(campoFecha).toDate() : undefined }
     )
     this.apuesta.apostar()
 
@@ -54,7 +54,9 @@ export class ApuestasReactiveComponent {
     if (erroresApuesta.length) return
 
     // sin el binding necesitamos hacer las transformaciones a mano
-    this.apuestaForm.get('resultado')!.setValue(this.apuesta.resultado?.valor() ?? null)
+    this.apuestaForm
+      .get('resultado')!
+      .setValue(this.apuesta.resultado?.valor() ?? null)
   }
 
   resultado() {
