@@ -15,17 +15,17 @@ export class ValidationErrorMessageComponent {
   @Input() fieldName !: string
 
 
-  protected tieneErrores() {
+  tieneErrores() {
     return this.control.errors && this.control.touched
   }
 
-  protected getListaErrores() {
+  getListaErrores() {
     const errors = this.control.errors
     if (errors == null) return []
     return Object.keys(errors)
   }
 
-  protected getMensajeError(validator: string) {
+  getMensajeError(validator: string) {
     const errors = this.control.errors! // Solo debería llegar acá si esto existe
 
     if (validator === 'required') return `Debe ingresar ${this.fieldName}`

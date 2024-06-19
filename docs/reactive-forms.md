@@ -91,7 +91,7 @@ Dicho componente, al que le pasamos como referencia el FormControl relevante, pu
 La implementación de errorMessage es una función que tiene baja cohesión, conoce todas las validaciones del formulario, y a medida que crece la cantidad de campos se vuelve más y más extenso:
 
 ```ts
-protected getMensajeError(validator: string) {
+getMensajeError(validator: string) {
   const errors = this.control.errors! // Solo debería llegar acá si esto existe
 
   if (validator === 'required') return `Debe ingresar ${this.fieldName}`
@@ -100,18 +100,18 @@ protected getMensajeError(validator: string) {
 }
 ```
 
-Nota menor: `??` es la versión typescript del "elvis operator" en kotlin: devuelve el valor de la izquierda cuando no es `null` o `undefined`, y el de la derecha en caso contrario.
+> **Nota menor:** `??` es la versión typescript del "elvis operator" en kotlin: devuelve el valor de la izquierda cuando no es `null` o `undefined`, y el de la derecha en caso contrario.
 
 ### Validadores Propios
 
 Para determinar si la fecha de apuesta es válida, definimos un validador propio. En su nivel mínimo, este debe ser una función que cumpla con tres requisitos:
 * Debe recibir como parametro un objeto de tipo `AbstractControl`.
-* Si el campo es valido, la función debe retornar null
+* Si el campo es válido, la función debe retornar null
 * Si no lo es, tiene que retornar algo.
   - Usualmente se devuelve un objeto, con una clave arbitraria seteada a algun booleano.
   - Podemos aprovechar esto para incluir un mensaje de error a mostrar en nuestro template.
 
-Para no tener multiples funciones esparcidas en nuestros componentes, podemos agruparlas en una clase:
+Para no tener múltiples funciones esparcidas en nuestros componentes, podemos agruparlas en una clase:
 
 ```ts
 export class DateValidator {
@@ -133,10 +133,10 @@ export class DateValidator {
 ```
 
 Tal vez observen algo ligeramente extraño al comienzo. Si viene sin valor, ¿devolvemos `null` como si todo estuviera bien?
-* Sí, eso ya lo podemos controlar con `Validators.required`. Validarlo de nuevo sería una responsabilidad duplicada.
-* De tener el campo como opcional, no queremos que se queje cuando no se haya ingresado.
-  - Queda a cargo del "submit" considerar el caso sin valor, y manejarlo apropiadamente.
-  - Si no es un valor vacío, va a tener garantizado que fue validado.
+* Sí, eso ya lo podemos controlar con `Validators.required`. Validarlo de nuevo sería una responsabilidad duplicada
+* De tener el campo como opcional, no queremos que se queje cuando no se haya ingresado
+  - Queda a cargo del "submit" considerar el caso sin valor, y manejarlo apropiadamente
+  - Si no es un valor vacío, va a tener garantizado que fue validado
 
 
 La interfaz que define el validador de Angular es un poco rara: es un objeto con una clave para el validador y adicionalmente un mensaje específico (o un booleano que indica si el valor es correcto).
@@ -146,17 +146,17 @@ La interfaz que define el validador de Angular es un poco rara: es un objeto con
 A la hora de definir el comportamiento del botón Apostar, aparecen algunas cuestiones
 
 - al no haber binding, necesitamos pasar la información que está en el form control hacia el objeto apuesta, lo que puede necesitar ciertas transformaciones (como en el caso de la fecha)
-- siendo así, solo queremos proceder cuando nuestras validaciones funcionaron. Aquí podemos aprovechar, como mencionamos un poco más arriba, para "tocar" todos los campos, y que se muestren todos los errores pendientes.
+- siendo así, solo queremos proceder cuando nuestras validaciones funcionaron. Aquí podemos aprovechar, como mencionamos un poco más arriba, para "tocar" todos los campos, y que se muestren todos los errores pendientes
 - luego de ejecutada la apuesta, se genera un objeto Resultado, pero nuevamente no hay binding, con lo cual tenemos que **manualmente** asignar un form control que sirve para tal fin para que el usuario lo visualice
-- en nuestro caso, al tener la misma clase Apuesta del ejemplo con templates tenemos una doble validación: la propia del formulario, y la interna que realiza el objeto.
-  - Es posible que estas validaciones no coincidan, o que el objeto igual tenga errores propios independientes del formulario. Siendo así, podemos capturar preventivamente esos errores y manejarlos/mostrarlos (en este ejemplo, para simplificar salen por consola).
+- en nuestro caso, al tener la misma clase Apuesta del ejemplo con templates tenemos una doble validación: la propia del formulario, y la interna que realiza el objeto
+  - Es posible que estas validaciones no coincidan, o que el objeto igual tenga errores propios independientes del formulario. Siendo así, podemos capturar preventivamente esos errores y manejarlos/mostrarlos (en este ejemplo, para simplificar salen por consola)
 
 ## Consecuencias
 
-- Para evitar que el ejemplo se extienda mucho, no implementamos la combinación de dropdowns para el tipo de apuesta vs. el valor a apostar. Solo permitimos apostar a pleno.
+- Para evitar que el ejemplo se extienda mucho, no implementamos la combinación de dropdowns para el tipo de apuesta vs. el valor a apostar. Solo permitimos apostar a pleno
 - Aun así, pasamos de 27 líneas a 77 aun con menos funcionalidades. La versión reactiva tiene menos declaratividad, y ese control trae como costo la necesidad de ser explícito con lo que queremos hacer
 - Hay algunas posibles ventajas en casos de formularios más complejos, o dinámicos. Principalmente, al no estar unido por binding a un objeto de un dominio podemos 
-- El testing no tiene diferencias con la otra variante, trabajamos con data-testid
+- El testing no tiene diferencias con la otra variante, trabajamos con `data-testid`
 
 ## Links
 
