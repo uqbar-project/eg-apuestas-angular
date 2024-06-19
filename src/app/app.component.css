@@ -20,3 +20,7 @@
     rgba(233, 241, 242, 1) 100%
   );
 }
+
+nav a.active{
+  font-weight: bold;
+}

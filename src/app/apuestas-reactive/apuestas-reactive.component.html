@@ -1,27 +1,14 @@
-<form clrForm [formGroup]="apuestaForm" class="form-control">
+<form [formGroup]="apuestaForm" class="form-control">
     <div class="row">
       <label for="fecha" class="form-label">Fecha</label>
       <input type="date" data-testid="fechaApuesta" id="fecha" name="fecha" formControlName="fecha" placeholder="Fecha de apuesta">
-      @if (errorMessage('fecha', 'dateShouldBeGreaterThanToday')) {
-        <div class="validation-row">
-          <div [attr.data-testid]="'errorMessage-fecha'" class="validation">
-            {{errorMessage('fecha', 'dateShouldBeGreaterThanToday')}}
-          </div>
-        </div>
-      }
+      <validation-error-message [control]="getFormControl('fecha')" [fieldName]="'fecha'"/>
     </div>
     <div class="row">
       <label for="monto">Monto</label>
-      <input clrInput type="number" data-testid="monto" name="monto" class="numeric" formControlName="monto"
+      <input type="number" data-testid="monto" name="monto" class="numeric" formControlName="monto"
         placeholder="Monto en $" required="true">
-
-      @if (errorMessage('monto', 'min')) {
-        <div class="validation-row">
-          <div [attr.data-testid]="'errorMessage-monto'" class="validation">
-            {{errorMessage('monto', 'min')}}
-          </div>
-        </div>
-      }
+      <validation-error-message [control]="getFormControl('monto')" [fieldName]="'monto'"/>
       </div>
     <div class="row">
       <label for="tipoApuesta">Tipo de Apuesta</label>
@@ -34,13 +21,7 @@
             <option [ngValue]="valor">{{valor}}</option>
         }
       </select>
-      @if (errorMessage('valorApostado', 'required')) {
-        <div class="validation-row">
-          <div [attr.data-testid]="'errorMessage-valorApostado'" class="validation">
-            {{errorMessage('valorApostado', 'required')}}
-          </div>
-        </div>
-      }
+      <validation-error-message [control]="getFormControl('valorApostado')" [fieldName]="'valorApostado'"/>
     </div>
     <div class="botonera">
       <button class="btn-primary" data-testid="btnApuesta" (click)="apostar()" type="submit">Apostar</button>

@@ -1,0 +1,9 @@
+@if (tieneErrores()) {
+  <div class="validation-row" [attr.data-testid]="'errors-' + fieldName">
+    @for (validator of getListaErrores(); track validator) {
+      <div [attr.data-testid]="'errorMessage-' + validator" class="validation">
+        {{getMensajeError(validator)}}
+      </div>
+    }
+  </div>
+}
