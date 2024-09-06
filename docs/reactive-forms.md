@@ -54,7 +54,6 @@ Para crear un formulario utilizamos un **form builder** que permite mejorar la e
         Validators.required,
       ]
     ],
-    resultado: ['']
   })
 ```
 
@@ -99,7 +98,7 @@ La implementación de errorMessage es una función que tiene baja cohesión, con
 errorMessage(field: string, validator: string) {
   const error = this.apuestaForm.get(field)?.errors
   if (validator === 'required' && error) return `Debe ingresar ${field}`
-  if (validator === 'min' && error) return `Debe ingresar un valor mayor para ${field}`
+  if (validator === 'min' && error) return `Debe ingresar un valor mayor a ${error['min']['min']} para ${field}`
   return error?.[validator]?.message ?? undefined
 }
 ```
@@ -125,12 +124,12 @@ La interfaz que define el validador de Angular es un poco rara: es un objeto con
 A la hora de definir el comportamiento del botón Apostar, aparecen algunas cuestiones
 
 - al no haber binding, necesitamos pasar la información que está en el form control hacia el objeto apuesta, lo que puede necesitar ciertas transformaciones (como en el caso de la fecha)
-- luego de la apuesta se genera un objeto Resultado, pero nuevamente no hay binding, con lo cual tenemos que **manualmente** asignar un form control que sirve para tal fin para que el usuario lo visualice
+- luego de la apuesta se genera un objeto Resultado, aquí delegamos en el binding unidireccional que renderiza el resultado
 
 ## Consecuencias
 
 - Para evitar que el ejemplo se extienda mucho, no implementamos la combinación de dropdowns para el tipo de apuesta vs. el valor a apostar. Solo permitimos apostar a pleno
-- Aun así, pasamos de 27 líneas a 77 aun con menos funcionalidades. La versión reactiva tiene menos declaratividad, y ese control trae como costo la necesidad de ser explícito con lo que queremos hacer
+- Aun así, pasamos de 27 líneas a 67 aun con menos funcionalidades. La versión reactiva tiene menos declaratividad, y ese control trae como costo la necesidad de ser explícito con lo que queremos hacer
 - Cuando la página comienza se disparan los validadores automáticamente, a diferencia de la variante con templating
 - El testing no tiene diferencias con la otra variante, trabajamos con data-testid
 

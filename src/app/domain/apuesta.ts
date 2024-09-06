@@ -1,3 +1,4 @@
+import dayjs from "dayjs"
 import { Resultado } from "./resultado"
 
 export const MONTO_MINIMO_PLENO = 10
@@ -79,7 +80,7 @@ export class Apuesta {
     if (!this.fecha) {
       this.addError('fecha', 'Debe ingresar una fecha de apuesta')
       } else {
-      if (now.getTime() > this.fecha.getTime()) {
+      if (dayjs(now).isAfter(dayjs(this.fecha))) {
         this.addError('fecha', 'Debe ingresar una fecha actual o posterior al día de hoy')
       }
     }

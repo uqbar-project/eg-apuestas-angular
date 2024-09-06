@@ -230,16 +230,16 @@ export class Apuesta {
 En el html principal delegamos a otro componente que muestra los mensajes de error de un field (le pasa la apuesta y el nombre del campo):
 
 ```html
-<validation-field [apuesta]="apuesta" [field]="'monto'"></validation-field>
+<validation-field [domainElement]="apuesta" [field]="'monto'"></validation-field>
 ```
 
 El componente ValidationField es sencillo, el html muestra un div el error del campo si existe (pueden ver los métodos en apuesta para determinar si hay errores para un campo o bien cuáles son esos errores de validación):
 
 ```html
-@if (apuesta.hasErrors(field)) {
+@if (domainElement.hasErrors(field)) {
   <div class="validation-row">
     <div [attr.data-testid]="'errorMessage-' + field" class="validation">
-      {{apuesta.errorsFrom(field)}}
+      {{domainElement.errorsFrom(field)}}
     </div>
   </div>
 }
@@ -249,10 +249,19 @@ Recibimos como @Input la apuesta y el nombre del campo:
 
 ```ts
 export class ValidationFieldComponent {
-  @Input() apuesta!: Apuesta
-  @Input() field!: string
+  @Input() field!:string
+  @Input() domainElement!: DomainElement
 }
-``` 
+```
+
+Pero para hacer más independiente el componente utilizamos una interfaz más general:
+
+```ts
+export type DomainElement = {
+  errorsFrom(field: string): string
+  hasErrors(field: string): boolean
+}
+```
 
 ## Resultado de la apuesta
 

@@ -46,10 +46,10 @@
       <button class="btn-primary" data-testid="btnApuesta" (click)="apostar()" type="submit">Apostar</button>
     </div>
     <div class="row">
-        @if (resultado()) {
-            <div class="message" data-testid="resultado">
-              {{resultado()}}
-            </div>
-        }
+      @if (apuesta.resultado) {
+        <div class="message" data-testid="resultado">
+          {{apuesta.resultado.valor()}}
+        </div>
+      }
     </div>
   </form>

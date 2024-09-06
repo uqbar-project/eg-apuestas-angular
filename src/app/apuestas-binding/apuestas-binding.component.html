@@ -2,13 +2,13 @@
     <div class="row">
       <label for="fecha" class="form-label">Fecha</label>
       <input type="date" data-testid="fechaApuesta" [(ngModel)]="fechaApuesta" name="fechaApuesta" placeholder="Fecha de apuesta" min="{{fechaApuestaMinima  | date: 'yyyy-MM-dd'}}">
-      <validation-field [apuesta]="apuesta" [field]="'fecha'"></validation-field>
+      <validation-field [domainElement]="apuesta" [field]="'fecha'"></validation-field>
     </div>
     <div class="row">
       <label for="monto">Monto</label>
       <input clrInput type="number" data-testid="monto" name="monto" class="numeric" [(ngModel)]="apuesta.monto"
         placeholder="Monto en $" required="true">
-      <validation-field [apuesta]="apuesta" [field]="'monto'"></validation-field>
+      <validation-field [domainElement]="apuesta" [field]="'monto'"></validation-field>
     </div>
     <div class="row">
       <label for="tipoApuesta">Tipo de Apuesta</label>
@@ -18,7 +18,7 @@
             <option [ngValue]="tipo">{{tipo.descripcion}}</option>
         }
       </select>
-      <validation-field [apuesta]="apuesta" [field]="'tipoApuesta'"></validation-field>
+      <validation-field [domainElement]="apuesta" [field]="'tipoApuesta'"></validation-field>
     </div>
     <div class="row">
       <label for="apuesta">Qué apostás</label>
@@ -28,7 +28,7 @@
             <option [ngValue]="valor">{{valor}}</option>
         }
       </select>
-      <validation-field [apuesta]="apuesta" [field]="'valorAApostar'"></validation-field>
+      <validation-field [domainElement]="apuesta" [field]="'valorAApostar'"></validation-field>
     </div>
     <div class="botonera">
       <button class="btn-primary" data-testid="btnApuesta" (click)="apostar()" type="submit">Apostar</button>

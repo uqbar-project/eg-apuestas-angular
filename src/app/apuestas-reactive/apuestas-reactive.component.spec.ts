@@ -27,7 +27,7 @@ describe('ApuestasReactiveComponent', () => {
     expect(mensajeDeError(fixture, 'fecha')).toContain('Debe ingresar fecha')
   })
   it('should fail if previous date is entered', () => {
-    apostarElDia(component, '01/01/1900')
+    apostarElDia(component, '1900-01-01')
     component.apuesta = new Apuesta()
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
@@ -44,7 +44,7 @@ describe('ApuestasReactiveComponent', () => {
     )
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
-    expect(mensajeDeError(fixture, 'monto')).toContain('Debe ingresar un valor mayor para monto')
+    expect(mensajeDeError(fixture, 'monto')).toContain('Debe ingresar un valor mayor a 10 para monto')
   })
   it('should pass all validations and inform if user wins - single', () => {
     apostarHoy(component)
@@ -56,6 +56,7 @@ describe('ApuestasReactiveComponent', () => {
     // component.apuesta.obtenerNumeroGanador = () => 25
     getByTestId(fixture, 'btnApuesta').click()
     fixture.detectChanges()
+
     hacerGanarSpy.calls.reset()
 
     expect(resultado(fixture)).toContain('Ganaste $700')
@@ -74,12 +75,12 @@ describe('ApuestasReactiveComponent', () => {
 })
 
 const apostarAl = (component: ApuestasReactiveComponent, numero: number, monto = 20) => {
-  component.apuestaForm.get('monto')?.setValue(monto.toString())
+  component.apuestaForm.get('monto')?.setValue(monto)
   component.apuestaForm.get('valorApostado')?.setValue(numero)
 }
 
 const apostarHoy = (component: ApuestasReactiveComponent) => {
-  apostarElDia(component, dayjs(new Date()).format('DD/MM/YYYY'))
+  apostarElDia(component, dayjs(new Date()).format('YYYY-MM-DD'))
 }
 
 const apostarElDia = (component: ApuestasReactiveComponent, fecha: string) => {

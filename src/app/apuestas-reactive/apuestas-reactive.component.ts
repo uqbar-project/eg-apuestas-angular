@@ -20,7 +20,7 @@ export class ApuestasReactiveComponent {
         DateValidator.greaterThanToday
       ]
     ],
-    monto: ['', [
+    monto: [0, [
         Validators.required,
         Validators.min(MONTO_MINIMO_PLENO),
       ]
@@ -30,7 +30,6 @@ export class ApuestasReactiveComponent {
         Validators.required,
       ]
     ],
-    resultado: ['']
   })
 
   constructor(private formBuilder: FormBuilder) {}
@@ -40,7 +39,7 @@ export class ApuestasReactiveComponent {
   errorMessage(field: string, validator: string) {
     const error = this.apuestaForm.get(field)?.errors
     if (validator === 'required' && error) return `Debe ingresar ${field}`
-    if (validator === 'min' && error) return `Debe ingresar un valor mayor para ${field}`
+    if (validator === 'min' && error) return `Debe ingresar un valor mayor a ${error['min']['min']} para ${field}`
     return error?.[validator]?.message ?? undefined
   }
 
@@ -55,13 +54,6 @@ export class ApuestasReactiveComponent {
       { fecha: fecha ? dayjs(fecha).toDate() : undefined },
     )
     this.apuesta.apostar()
-
-    // sin el binding necesitamos hacer las transformaciones a mano
-    this.apuestaForm.get('resultado')!.setValue(this.apuesta.resultado?.valor() ?? null)
-  }
-
-  resultado() {
-    return this.apuestaForm.get('resultado')?.value ?? undefined
   }
 }
 

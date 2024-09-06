@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core'
-import { Apuesta } from 'app/domain/apuesta'
 
 @Component({
   selector: 'validation-field',
@@ -8,6 +7,11 @@ import { Apuesta } from 'app/domain/apuesta'
   standalone: true,
 })
 export class ValidationFieldComponent {
-  @Input() apuesta!: Apuesta
-  @Input() field!: string
+  @Input() domainElement!: DomainElement
+  @Input() field!:string
+}
+
+export type DomainElement = {
+  errorsFrom(field: string): string
+  hasErrors(field: string): boolean
 }

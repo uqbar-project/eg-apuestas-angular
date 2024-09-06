@@ -89,7 +89,7 @@ describe('ApuestasBindingComponent', () => {
 
 })
 
-function apostarAl(tipoApuesta: TipoApuesta, numero: number | string, monto = 20): Apuesta {
+const apostarAl = (tipoApuesta: TipoApuesta, numero: number | string, monto = 20): Apuesta => {
   const apuesta = new Apuesta()
   apuesta.monto = monto
   apuesta.tipoApuesta = tipoApuesta
@@ -98,18 +98,19 @@ function apostarAl(tipoApuesta: TipoApuesta, numero: number | string, monto = 20
 }
 
 const apostarHoy = (component: ApuestasBindingComponent) => {
-  component.fechaApuesta = dayjs(new Date()).format('DD/MM/YYYY')
+  component.fechaApuesta = dayjs(new Date()).format('YYYY-MM-DD')
 }
 
-export const getByTestId = (appComponent: ComponentFixture<unknown>, testId: string) => {
-  const compiled = appComponent.debugElement.nativeElement
-  return compiled.querySelector(`[data-testid="${testId}"]`)
-}
-
-export const mensajeDeError = (fixture: ComponentFixture<unknown>, field: string) => {
+const mensajeDeError = (fixture: ComponentFixture<unknown>, field: string) => {
   return getByTestId(fixture, `errorMessage-${field}`).textContent
 }
 
-export const resultado = (fixture: ComponentFixture<unknown>) => {
+const resultado = (fixture: ComponentFixture<unknown>) => {
   return getByTestId(fixture, 'resultado').textContent
+}
+
+// Podría ser una función genérica
+const getByTestId = (appComponent: ComponentFixture<unknown>, testId: string) => {
+  const compiled = appComponent.debugElement.nativeElement
+  return compiled.querySelector(`[data-testid="${testId}"]`)
 }
